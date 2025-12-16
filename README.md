@@ -2,6 +2,9 @@
 
 > **Note:** This project uses the Visual Studio 2022 build configuration as it's the latest version supported by Premake. However, you can use any version of Visual Studio 2022 or newer—we're currently developing with Visual Studio 2026.
 
+## Solution Setup
+All solution and dependency generation is done through premake. Click on GenerateProjects.bat to generate .sln file.
+
 ## ReSharper C++ Setup
 
 ReSharper C++ is recommended for enhanced code analysis and refactoring support. Students can obtain a free educational license using their college email through the [JetBrains Student Program](https://www.jetbrains.com/community/education/#students).
