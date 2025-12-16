@@ -3,7 +3,10 @@
 > **Note:** This project uses the Visual Studio 2022 build configuration as it's the latest version supported by Premake. However, you can use any version of Visual Studio 2022 or newer—we're currently developing with Visual Studio 2026.
 
 ## Solution Setup
-All solution and dependency generation is done through premake. Click on GenerateProjects.bat to generate .sln file.
+All solution and dependency generation is done through premake. Click on `GenerateProjects.bat` to generate `.sln` file.
+
+## Third-Party Library Setup
+Libraries are managed through git submodule. Run `git submodule update --init --recursive` in the root folder.
 
 ## ReSharper C++ Setup
 
