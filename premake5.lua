@@ -24,6 +24,13 @@ project (engineName)
         "%{prj.name}/src/**.cpp"
     }
 
+    includedirs
+    {
+        "%{prj.name}/third-party/spdlog/include";
+    }
+	
+	buildoptions { "/utf-8" }
+
 project (launcherName)
     location (launcherName)
     kind "StaticLib"
@@ -48,6 +55,8 @@ project (launcherName)
     {
         (engineName)
     }
+	
+	buildoptions { "/utf-8" }
 
 
 
@@ -75,3 +84,5 @@ project "Sandbox"
     {
         (launcherName)
     }
+	
+	buildoptions { "/utf-8" }
