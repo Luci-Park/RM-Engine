@@ -17,7 +17,7 @@
 #include <windows.h>
 
 // C RunTime Header Files
-#include <algorithm>
+#include <algorithm> 
 #include <cassert>
 #include <malloc.h>
 #include <memory.h>
@@ -26,3 +26,4 @@
 #include <string_view>
 #include <tchar.h>
 #include <vector>
+#include "Engine/Logging/EngineLog.h"

@@ -8,7 +8,7 @@ namespace rm
 		Application();
 		virtual ~Application();
 
-		void Run();
+		virtual void Run();
 	};
 
 	Application* CreateApplication();

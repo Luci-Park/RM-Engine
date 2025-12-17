@@ -18,6 +18,9 @@ project (engineName)
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+    pchheader "pch.h"
+    pchsource "%{prj.name}/src/pch.cpp"
+    
     files
     {
         "%{prj.name}/src/**.h",
@@ -26,10 +29,17 @@ project (engineName)
 
     includedirs
     {
-        "%{prj.name}/third-party/spdlog/include";
+        "%{prj.name}/third-party/spdlog/include",
+        engineName .. "/src"
     }
 	
 	buildoptions { "/utf-8" }
+    
+    filter "system:windows"
+        systemversion "latest"
+
+    filter "toolset:msc*"
+        buildoptions { "/Zc:preprocessor" }
 
 project (launcherName)
     location (launcherName)
@@ -39,6 +49,9 @@ project (launcherName)
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    pchheader "pch.h"
+    pchsource "%{prj.name}/src/pch.cpp"
 
     files
     {
@@ -58,6 +71,11 @@ project (launcherName)
 	
 	buildoptions { "/utf-8" }
 
+    filter "system:windows"
+        systemversion "latest"
+
+    filter "toolset:msc*"
+        buildoptions { "/Zc:preprocessor" }
 
 
 project "Sandbox"
@@ -68,6 +86,9 @@ project "Sandbox"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    
+    pchheader "pch.h"
+    pchsource "%{prj.name}/src/pch.cpp"
     
     files
     {
@@ -86,3 +107,9 @@ project "Sandbox"
     }
 	
 	buildoptions { "/utf-8" }
+
+    filter "system:windows"
+        systemversion "latest"
+
+    filter "toolset:msc*"
+        buildoptions { "/Zc:preprocessor" }

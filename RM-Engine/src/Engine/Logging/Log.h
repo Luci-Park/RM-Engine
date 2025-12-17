@@ -1,0 +1,42 @@
+/**
+ * @file Log.h
+ * @author sumin.park
+ * @brief The logging system.
+ * @version 0.1
+ * @date 12/16/2025 3:47:59 PM
+ *
+ * @copyright Copyright (c) 2025 - RM Engine
+ *
+ */
+
+#pragma once
+#include <format>
+#include <source_location>
+#include <string>
+
+namespace rm
+{
+	enum class LogLevel : unsigned char { Trace, Debug, Info, Warn, Error, Critical };
+	enum class LoggerId : unsigned char { Engine, App };
+
+	class Log
+	{
+	public:
+		static void Init();
+		static void Shutdown();
+		static void Submit(LoggerId logger, LogLevel level
+							, std::string_view message
+							, std::source_location where = std::source_location::current());
+
+		static void FailFast(const char* expr, std::string_view message
+			, std::source_location where = std::source_location::current());
+
+	private:
+	};
+
+	template<typename... Args>
+	std::string Format(std::format_string<Args...> fmt, Args&&... args)
+	{
+		return std::format(fmt, std::forward<Args>(args)...);
+	}
+} // rm namespace
