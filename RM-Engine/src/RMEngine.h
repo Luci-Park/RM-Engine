@@ -14,3 +14,4 @@
 
 #include "Engine/Application.h"
 #include "Engine/Logging/AppLog.h"
+#include "Engine/Logging/Assert.h"

@@ -27,3 +27,4 @@
 #include <tchar.h>
 #include <vector>
 #include "Engine/Logging/EngineLog.h"
+#include "Engine/Logging/Assert.h"

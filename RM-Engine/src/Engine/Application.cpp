@@ -11,8 +11,7 @@
 
 #include "pch.h"
 #include "Application.h"
-
-#include <spdlog/fmt/bundled/format.h>
+#include "Engine/Logging/Assert.h"
 
 namespace rm
 {
@@ -29,7 +28,8 @@ namespace rm
 	void Application::Run()
 	{
 		Log::Init();
-		int* ptr = nullptr;
+		RM_ASSERT(false);
+
 		Log::Shutdown();		
 	}
 }

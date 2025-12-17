@@ -10,24 +10,25 @@
  */
 
 #pragma once
-#include "Log.h"
+#include <cstdlib>
 
-#ifndef NDEBUG
-#define RM_ASSERT(expr, fmt, ...) \
-        do { \
-            if(!(expr)) { \
-                ::rm::Log::FailFast(#expr, ::rm::Format((fmt) __VA_OPT__(,) __VA_ARGS__), std::source_location::current()); \
-                RM_DEBUGBREAK(); \
-            } \
-        } while(0)
+#if defined(_MSC_VER)
+#define RM_DEBUGBREAK() __debugbreak()
+#elif defined(__clang__) || defined(__GNUC__)
+#define RM_DEBUGBREAK() __builtin_trap()
 #else
-#define RM_ASSERT(...) ((void)0)
+#define RM_DEBUGBREAK() std::abort()
 #endif
 
-// Optional: always-on verify (shipping assert)
-#define RM_VERIFY(expr, fmt, ...) \
+ // Debug-only assert: breaks when condition is false.
+ // In Release, it compiles out completely.
+#ifndef NDEBUG
+#define RM_ASSERT(expr) \
     do { \
-        if(!(expr)) { \
-            ::rm::Log::FailFast(#expr, ::rm::Format((fmt) __VA_OPT__(,) __VA_ARGS__), std::source_location::current()); \
-        } \
+      if(!(expr)) { \
+        RM_DEBUGBREAK(); \
+      } \
     } while(0)
+#else
+#define RM_ASSERT(expr) ((void)0)
+#endif
