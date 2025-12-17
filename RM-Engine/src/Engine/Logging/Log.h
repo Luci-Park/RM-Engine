@@ -27,10 +27,6 @@ namespace rm
 		static void Submit(LoggerId logger, LogLevel level
 							, std::string_view message
 							, std::source_location where = std::source_location::current());
-
-		static void FailFast(const char* expr, std::string_view message
-			, std::source_location where = std::source_location::current());
-
 	private:
 	};
 

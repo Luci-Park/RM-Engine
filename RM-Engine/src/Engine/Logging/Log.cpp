@@ -70,8 +70,4 @@ namespace rm
 		assert(targetLogger);
 		targetLogger->log(ToSpdLvl(level), "{}", message);
 	}
-
-	void Log::FailFast(const char* expr, std::string_view message, std::source_location where)
-	{
-	}
 } // rm namespace
