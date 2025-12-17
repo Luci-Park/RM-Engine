@@ -15,15 +15,8 @@
 class Sandbox : public rm::Application
 {
 public:
-	Sandbox()
-	{
-	}
-	~Sandbox(){}
-	virtual void Run() override
-	{
-		Application::Run();
-		while (true);
-	}
+	Sandbox() = default;
+	~Sandbox() = default;
 };
 
 rm::Application* rm::CreateApplication()

@@ -16,7 +16,11 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <array>
-#include <cstdlib>
+
+constexpr auto LOG_MAX_FILE_SIZE_BYTES = (5 * 1024 * 1024);
+constexpr auto LOG_MAX_ROTATION_FILES = 3;
+constexpr auto LOG_PATTERN = "%^[%H:%M:%S] [%n] [%l] %v%$";
+constexpr auto LOG_PATH = "../log/app.log";
 
 namespace rm
 {
@@ -32,8 +36,7 @@ namespace rm
 		case LogLevel::Warn:     return spdlog::level::warn;
 		case LogLevel::Error:    return spdlog::level::err;
 		case LogLevel::Critical: return spdlog::level::critical;
-		}
-		return spdlog::level::info;
+		}		
 	}
 
 	static spdlog::logger* Get(LoggerId id)
@@ -44,9 +47,9 @@ namespace rm
 	void Log::Init()
 	{
 		auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-		auto file = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/app.log", 5 * 1024 * 1024, 3);
+		auto file = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(LOG_PATH, LOG_MAX_FILE_SIZE_BYTES, LOG_MAX_ROTATION_FILES);
 
-		console->set_pattern("%^[%H:%M:%S] [%n] [%l] %v%$");
+		console->set_pattern(LOG_PATTERN);
 		spdlog::flush_on(spdlog::level::err);
 
 

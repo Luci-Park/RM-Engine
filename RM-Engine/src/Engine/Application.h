@@ -15,10 +15,10 @@ namespace rm
 	class Application
 	{
 	public:
-		Application();
-		virtual ~Application();
+		Application() = default;
+		virtual ~Application() = default;
 
-		virtual void Run();
+		void Run();
 	};
 
 	Application* CreateApplication();
