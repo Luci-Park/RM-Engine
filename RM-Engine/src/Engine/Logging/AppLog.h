@@ -1,7 +1,7 @@
 /**
  * @file AppLog.h
- * @author dream
- * @brief // TODO: Add a brief description of this header
+ * @author sumin.park
+ * @brief Logging for apps using the engine.
  * @version 0.1
  * @date 12/16/2025 8:35:18 PM
  *

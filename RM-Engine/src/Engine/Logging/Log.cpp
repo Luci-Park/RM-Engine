@@ -1,7 +1,7 @@
 /**
  * @file Log.cpp
  * @author sumin.park
- * @brief The loGGing system
+ * @brief The static class that manages logging.
  * 
  * @version 0.1
  * @date 12/16/2025 3:47:59 PM

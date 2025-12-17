@@ -1,7 +1,7 @@
 /**
  * @file Assert.h
- * @author dream
- * @brief // TODO: Add a brief description of this header
+ * @author sumin.park
+ * @brief The RM_ASSERT macro definition file.
  * @version 0.1
  * @date 12/16/2025 8:54:04 PM
  *
@@ -10,7 +10,6 @@
  */
 
 #pragma once
-
 #include "Log.h"
 
 #ifndef NDEBUG

@@ -1,7 +1,7 @@
 /**
  * @file Log.h
  * @author sumin.park
- * @brief The logging system.
+ * @brief The static class that manages logging.
  * @version 0.1
  * @date 12/16/2025 3:47:59 PM
  *
