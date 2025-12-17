@@ -1,11 +1,22 @@
 
+#include "pch.h"
 #include <RMEngine.h>
+/**
+ * @file main.cpp
+ * @author sumin.park
+ * @brief Main sandbox area.
+ * @version 0.1
+ * @date 12/16/2025 3:47:59 PM
+ *
+ * @copyright Copyright (c) 2025 - RM Engine
+ *
+ */
 
 class Sandbox : public rm::Application
 {
 public:
-	Sandbox(){}
-	~Sandbox(){}
+	Sandbox() = default;
+	~Sandbox() = default;
 };
 
 rm::Application* rm::CreateApplication()

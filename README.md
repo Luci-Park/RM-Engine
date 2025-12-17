@@ -4,7 +4,10 @@
 
 ## Solution Setup
 
-All solution and dependency generation is done through premake. Click on GenerateProjects.bat to generate .sln file.
+All solution and dependency generation is done through premake. Click on `GenerateProjects.bat` to generate `.sln` file.
+
+## Third-Party Library Setup
+Libraries are managed through git submodule. Run `git submodule update --init --recursive` in the root folder.
 
 ## ReSharper C++ Setup
 
