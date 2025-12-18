@@ -1,5 +1,5 @@
 /**
- * @file WindowsWindow.h
+ * @file WinGLFWWindow.h
  * @author sumin.park
  * @brief  Window class for the Windows OS
  * @version 0.1
@@ -15,11 +15,11 @@ class GLFWwindow;
 
 namespace rm
 {
-	class WindowsWindow final : public Window
+	class WinGLFWWindow final : public Window
 	{
 	public:
-		WindowsWindow(const WindowProps& props);
-		~WindowsWindow() override;
+		WinGLFWWindow(const WindowProps& props);
+		~WinGLFWWindow() override;
 
 		uint32_t GetWidth() const override { return windowData.Width; }
 		uint32_t GetHeight() const override { return windowData.Height; }

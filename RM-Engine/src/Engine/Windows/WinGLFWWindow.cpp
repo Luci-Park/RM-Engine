@@ -1,5 +1,5 @@
 /**
- * @file WindowsWindow.cpp
+ * @file WinGLFWWindow.cpp
  * @author sumin.park
  * @brief  Window class for the Windows OS
  * @version 0.1
@@ -10,22 +10,22 @@
  */
 
 #include "pch.h"
-#include "WindowsWindow.h"
+#include "WinGLFWWindow.h"
 
 #include <GLFW/glfw3.h>
 
 namespace rm
 {
-	WindowsWindow::WindowsWindow(const WindowProps& props)
+	WinGLFWWindow::WinGLFWWindow(const WindowProps& props)
 	{
 		Init(props);
 	}
 
-	WindowsWindow::~WindowsWindow()
+	WinGLFWWindow::~WinGLFWWindow()
 	{
 		ShutDown();
 	}
-	void WindowsWindow::Init(const WindowProps& props)
+	void WinGLFWWindow::Init(const WindowProps& props)
 	{
 		windowData.Title = props.Title;
 		windowData.Width = static_cast<int>(props.Width);
@@ -49,7 +49,7 @@ namespace rm
 		
 	}
 
-	void WindowsWindow::SetVsync(bool enable)
+	void WinGLFWWindow::SetVsync(bool enable)
 	{
 		if (enable)
 			glfwSwapInterval(1);
@@ -59,7 +59,7 @@ namespace rm
 		windowData.VSync = enable;
 	}
 
-	void WindowsWindow::Update()
+	void WinGLFWWindow::Update()
 	{
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -67,7 +67,7 @@ namespace rm
 		glfwSwapBuffers(window);
 	}
 
-	void WindowsWindow::ShutDown()
+	void WinGLFWWindow::ShutDown()
 	{
 		glfwDestroyWindow(window);
 		window = nullptr;
