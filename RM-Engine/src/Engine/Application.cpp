@@ -13,6 +13,8 @@
 #include "Application.h"
 #include <GLFW/glfw3.h>
 
+#include "Logging/Assert.h"
+
 namespace rm
 {
 	GLFWwindow* window = nullptr;
