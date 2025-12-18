@@ -124,6 +124,11 @@ project "Sandbox"
 	
 	buildoptions { "/utf-8" }
 
+    postbuildcommands
+    {
+        '{COPYFILE} "%{wks.location}/RM-Engine/third-party/glfw/lib-vc2022/glfw3.dll" "%{cfg.targetdir}/glfw3.dll"'
+    }
+
     filter "system:windows"
         systemversion "latest"
 
