@@ -14,8 +14,14 @@
 
 int main(int argc, char** argv)
 {
+	rm::Log::Init();
+
 	auto app = rm::CreateApplication();
+	app->Init();
 	app->Run();
+	app->Shutdown();
 	delete app;
+	
+	rm::Log::Shutdown();
 	return 0;
 }

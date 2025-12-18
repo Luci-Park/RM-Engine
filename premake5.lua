@@ -4,9 +4,14 @@ workspace "RM-Engine"
     architecture "x64"
     startproject "Sandbox"
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 engineName = "RM-Engine"
 launcherName = "RM-Launcher"
+
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = engineName .. "/third-party/glfw"
 
 
 project (engineName)
@@ -30,9 +35,10 @@ project (engineName)
     includedirs
     {
         "%{prj.name}/third-party/spdlog/include",
+        IncludeDir.GLFW .. "/include",
         engineName .. "/src"
     }
-	
+
 	buildoptions { "/utf-8" }
     
     filter "system:windows"
@@ -103,13 +109,29 @@ project "Sandbox"
 
     links
     {
-        (launcherName)
+        (launcherName),
+        "glfw3dll.lib",
+        "opengl32.lib",
+        "user32.lib",
+        "gdi32.lib",
+        "shell32.lib"
+    }
+
+    libdirs
+    {
+        IncludeDir.GLFW .. "/lib-vc2022"
     }
 	
 	buildoptions { "/utf-8" }
 
+    postbuildcommands
+    {
+        '{COPYFILE} "%{wks.location}/RM-Engine/third-party/glfw/lib-vc2022/glfw3.dll" "%{cfg.targetdir}/glfw3.dll"'
+    }
+
     filter "system:windows"
         systemversion "latest"
+
 
     filter "toolset:msc*"
         buildoptions { "/Zc:preprocessor" }
