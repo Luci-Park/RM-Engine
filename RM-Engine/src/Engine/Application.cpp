@@ -20,32 +20,19 @@ namespace rm
 	GLFWwindow* window = nullptr;
 	void Application::Init()
 	{
-		RM_ASSERT(glfwInit());
-		
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);\
-
-		window = glfwCreateWindow(
-			1280,
-			720,
-			"GLFW Window (No OpenGL)",
-			nullptr,
-			nullptr
-		);
+		window = Window::Create();
+		isRunning = true;
 	}
 
 	void Application::Run() 
 	{
-		RM_ASSERT(window != nullptr);
-		while (!glfwWindowShouldClose(window))
+		while (isRunning)
 		{
-			glfwPollEvents();
+			window->Update();
 		}
 	}
 
 	void Application::Shutdown()
 	{
-		glfwDestroyWindow(window);
-		glfwTerminate();
 	}
 }

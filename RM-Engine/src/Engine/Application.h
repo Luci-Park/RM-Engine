@@ -9,6 +9,8 @@
  *
  */
 #pragma once
+#include "Engine/Windows/Window.h"
+#include <memory>
 
 namespace rm
 {
@@ -20,8 +22,12 @@ namespace rm
 		void Init();
 		void Run();
 		void Shutdown();
+
+	private:
+		std::unique_ptr<Window> window;
+		bool isRunning = false;
 	};
+	
 		
 	Application* CreateApplication();
 }
-
