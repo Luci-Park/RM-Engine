@@ -13,7 +13,7 @@
 #include "Application.h"
 #include <GLFW/glfw3.h>
 
-#include "Logging/Assert.h"
+#include "Input/Input.h"
 
 namespace rm
 {
@@ -29,6 +29,10 @@ namespace rm
 		while (isRunning)
 		{
 			window->Update();
+			if (Input::IsKeyPressed(GLFW_KEY_SPACE))
+			{
+				LOG_INFO("Space bar is pressed.");
+			}
 		}
 	}
 
