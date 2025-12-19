@@ -1,7 +1,7 @@
 /**
  * @file Input.h
  * @author rahul
- * @brief // TODO: Add a brief description of this header
+ * @brief Static interface system for querying keyboard and mouse input state.
  * @version 0.1
  * @date 12/18/2025 12:28:54 PM
  *
@@ -22,7 +22,7 @@ namespace rm
 		// Only to be called after creation of GLFWwindow*
 		static void Init(GLFWwindow* window);
 
-		static voic Shutdown();
+		static void Shutdown();
 
 		static void BeginFrame();
 

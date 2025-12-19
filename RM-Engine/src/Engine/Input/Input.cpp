@@ -1,7 +1,7 @@
 /**
  * @file Input.cpp
  * @author rahul
- * @brief // TODO: Add a brief description of this class
+ * @brief Static interface system for querying keyboard and mouse input state.
  * @version 0.1
  * @date 12/18/2025 12:28:54 PM
  *
@@ -16,10 +16,9 @@
 
 namespace rm
 {
-	static Input::State s_State{};
-
 	Input::State& Input::GetState()
 	{
+		static State s_State{};
 		return s_State;
 	}
 
@@ -153,6 +152,29 @@ namespace rm
 		auto& s = GetState();
 		if (button < 0 || button >= State::MaxMouseButtons) return false;
 		return !s.mouse[button] && s.prevMouse[button];
+	}
+
+	// --- Mouse States ---
+
+	float Input::GetMouseX()
+	{
+		return GetState().mouseX;
+	}
+
+	float Input::GetMouseY()
+	{
+		return GetState().mouseY;
+	}
+
+	std::pair<float, float> Input::GetMousePosition()
+	{
+		const auto& s = GetState();
+		return { s.mouseX, s.mouseY };
+	}
+
+	float Input::GetScrollDeltaY()
+	{
+		return GetState().scrollDeltaY;
 	}
 
 	// --- Internal setters (not used externally right now, but kept for future refactors) ---
