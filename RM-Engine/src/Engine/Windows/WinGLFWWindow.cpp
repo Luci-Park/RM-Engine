@@ -10,22 +10,24 @@
  */
 
 #include "pch.h"
-#include "WinGLFWWindow.h"
+#include "WinGLFWwindow.h"
 
 #include <GLFW/glfw3.h>
 
+#include "Engine/Input/Input.h"
+
 namespace rm
 {
-	WinGLFWWindow::WinGLFWWindow(const WindowProps& props)
+	WinGLFWwindow::WinGLFWwindow(const WindowProps& props)
 	{
 		Init(props);
 	}
 
-	WinGLFWWindow::~WinGLFWWindow()
+	WinGLFWwindow::~WinGLFWwindow()
 	{
-		ShutDown();
+		Shutdown();
 	}
-	void WinGLFWWindow::Init(const WindowProps& props)
+	void WinGLFWwindow::Init(const WindowProps& props)
 	{
 		windowData.Title = props.Title;
 		windowData.Width = static_cast<int>(props.Width);
@@ -34,7 +36,7 @@ namespace rm
 
 		RM_ASSERT(glfwInit());
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
 		window = glfwCreateWindow(windowData.Width, windowData.Height, windowData.Title.c_str()
@@ -45,11 +47,13 @@ namespace rm
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
 
+		Input::Init(window);
+
 		SetVsync(windowData.VSync);
 		
 	}
 
-	void WinGLFWWindow::SetVsync(bool enable)
+	void WinGLFWwindow::SetVsync(bool enable)
 	{
 		if (enable)
 			glfwSwapInterval(1);
@@ -59,16 +63,21 @@ namespace rm
 		windowData.VSync = enable;
 	}
 
-	void WinGLFWWindow::Update()
+	void WinGLFWwindow::Update()
 	{
+		Input::BeginFrame();
+
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
+
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
-	void WinGLFWWindow::ShutDown()
+	void WinGLFWwindow::Shutdown()
 	{
+		Input::Shutdown();
+
 		glfwDestroyWindow(window);
 		window = nullptr;
 		glfwTerminate();

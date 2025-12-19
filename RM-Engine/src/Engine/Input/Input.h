@@ -21,9 +21,9 @@ namespace rm
 	public:
 		// Only to be called after creation of GLFWwindow*
 		static void Init(GLFWwindow* window);
-
 		static void Shutdown();
 
+		// Call once per frame BEFORE glfwPollEvents()
 		static void BeginFrame();
 
 		// --- Keyboard ---
@@ -35,7 +35,7 @@ namespace rm
 
 		// --- Mouse Buttons ---
 
-		// Using GLFW mouse codes (e.g. GLFW_MOUSE_BUTON_LEFT)
+		// Using GLFW mouse codes (e.g. GLFW_MOUSE_BUTTON_LEFT)
 		static bool IsMouseDown(int button);
 		static bool IsMousePressed(int button);
 		static bool IsMouseReleased(int button);
@@ -54,7 +54,6 @@ namespace rm
 
 		struct State
 		{
-			// WISH: RME-23 making input system data driven
 			static constexpr int MaxKeys = 512;
 			static constexpr int MaxMouseButtons = 16;
 
@@ -75,11 +74,10 @@ namespace rm
 
 		static State& GetState();
 
-		// GLFW callback handlers (registered in Init)
+		// Internal setters (kept for future refactors)
 		static void SetKey(int key, bool down);
 		static void SetMouseButton(int button, bool down);
 		static void SetMousePos(float x, float y);
 		static void AddScroll(float yOffset);
 	};
-
-} // rm namespace
+}

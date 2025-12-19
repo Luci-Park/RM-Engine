@@ -30,61 +30,45 @@ namespace rm
 		s.window = window;
 		s.initialized = true;
 
-		// Seed mouse position so that for first frame it is not (0,0), in case the cursor has moved
+		// Seed mouse position so first frame isn't (0,0)
 		double x = 0.0, y = 0.0;
 		glfwGetCursorPos(window, &x, &y);
 		s.mouseX = static_cast<float>(x);
 		s.mouseY = static_cast<float>(y);
 
-		// Storing pointer to our state on GLFWwindow (this will be useful if we decide to have multi-window support later on)
-		glfwSetWindowUserPointer(window, &s);
-
 		// --- Callbacks ---
 
-		glfwSetKeyCallback(window, [](GLFWwindow* w, int key, int /*scancode*/, int action, int /*mods*/)
+		glfwSetKeyCallback(window, [](GLFWwindow* /*w*/, int key, int /*scancode*/, int action, int /*mods*/)
 			{
-				auto* state = static_cast<State*>(glfwGetWindowUserPointer(w));
-				if (!state) return;
-
+				auto& state = Input::GetState();
 				if (key < 0 || key >= State::MaxKeys) return;
 
-				if (action == GLFW_PRESS)
-					state->keys[key] = true;
-				else if (action == GLFW_RELEASE)
-					state->keys[key] = false;
-				else if (action == GLFW_REPEAT)
-					state->keys[key] = true; // Still down
+				if (action == GLFW_PRESS)         state.keys[key] = true;
+				else if (action == GLFW_RELEASE)  state.keys[key] = false;
+				else if (action == GLFW_REPEAT)   state.keys[key] = true;
 			});
 
-		glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int button, int action, int /*mods*/)
-		{
-				auto* state = static_cast<State*>(glfwGetWindowUserPointer(w));
-				if (!state) return;
-
+		glfwSetMouseButtonCallback(window, [](GLFWwindow* /*w*/, int button, int action, int /*mods*/)
+			{
+				auto& state = Input::GetState();
 				if (button < 0 || button >= State::MaxMouseButtons) return;
 
-				if (action == GLFW_PRESS)
-					state->mouse[button] = true;
-				else if (action == GLFW_RELEASE)
-					state->mouse[button] = false;
-		});
-
-		glfwSetCursorPosCallback(window, [](GLFWwindow* w, double xPos, double yPos)
-			{
-				auto* state = static_cast<State*>(glfwGetWindowUserPointer(w));
-				if (!state) return;
-
-				state->mouseX = static_cast<float>(xPos);
-				state->mouseY = static_cast<float>(yPos);
+				if (action == GLFW_PRESS)         state.mouse[button] = true;
+				else if (action == GLFW_RELEASE)  state.mouse[button] = false;
 			});
 
-		glfwSetScrollCallback(window, [](GLFWwindow* w, double /*xOffset*/, double yOffset)
-		{
-				auto* state = static_cast<State*>(glfwGetWindowUserPointer(w));
-				if (!state) return;
+		glfwSetCursorPosCallback(window, [](GLFWwindow* /*w*/, double xPos, double yPos)
+			{
+				auto& state = Input::GetState();
+				state.mouseX = static_cast<float>(xPos);
+				state.mouseY = static_cast<float>(yPos);
+			});
 
-				state->scrollDeltaY += static_cast<float>(yOffset);
-		});
+		glfwSetScrollCallback(window, [](GLFWwindow* /*w*/, double /*xOffset*/, double yOffset)
+			{
+				auto& state = Input::GetState();
+				state.scrollDeltaY += static_cast<float>(yOffset);
+			});
 
 		LOG_INFO("Input layer initialized (GLFW callbacks registered).");
 	}
@@ -104,7 +88,6 @@ namespace rm
 		std::memcpy(s.prevKeys, s.keys, sizeof(s.keys));
 		std::memcpy(s.prevMouse, s.mouse, sizeof(s.mouse));
 
-		// Per-frame deltas reset here
 		s.scrollDeltaY = 0.0f;
 	}
 
@@ -112,59 +95,46 @@ namespace rm
 
 	bool Input::IsKeyDown(int key)
 	{
-		auto& s = GetState();
-		if (key < 0 || key >= State::MaxKeys) return false;
-		return s.keys[key];
+		const auto& s = GetState();
+		return key >= 0 && key < State::MaxKeys && s.keys[key];
 	}
 
 	bool Input::IsKeyPressed(int key)
 	{
-		auto& s = GetState();
-		if (key < 0 || key >= State::MaxKeys) return false;
-		return s.keys[key] && !s.prevKeys[key];
+		const auto& s = GetState();
+		return key >= 0 && key < State::MaxKeys && s.keys[key] && !s.prevKeys[key];
 	}
 
 	bool Input::IsKeyReleased(int key)
 	{
-		auto& s = GetState();
-		if (key < 0 || key >= State::MaxKeys) return false;
-		return !s.keys[key] && s.prevKeys[key];
+		const auto& s = GetState();
+		return key >= 0 && key < State::MaxKeys && !s.keys[key] && s.prevKeys[key];
 	}
 
 	// --- Mouse Button Queries ---
 
 	bool Input::IsMouseDown(int button)
 	{
-		auto& s = GetState();
-		if (button < 0 || button >= State::MaxMouseButtons) return false;
-		return s.mouse[button];
+		const auto& s = GetState();
+		return button >= 0 && button < State::MaxMouseButtons && s.mouse[button];
 	}
 
 	bool Input::IsMousePressed(int button)
 	{
-		auto& s = GetState();
-		if (button < 0 || button >= State::MaxMouseButtons) return false;
-		return s.mouse[button] && !s.prevMouse[button];
+		const auto& s = GetState();
+		return button >= 0 && button < State::MaxMouseButtons && s.mouse[button] && !s.prevMouse[button];
 	}
 
 	bool Input::IsMouseReleased(int button)
 	{
-		auto& s = GetState();
-		if (button < 0 || button >= State::MaxMouseButtons) return false;
-		return !s.mouse[button] && s.prevMouse[button];
+		const auto& s = GetState();
+		return button >= 0 && button < State::MaxMouseButtons && !s.mouse[button] && s.prevMouse[button];
 	}
 
-	// --- Mouse States ---
+	// --- Mouse State ---
 
-	float Input::GetMouseX()
-	{
-		return GetState().mouseX;
-	}
-
-	float Input::GetMouseY()
-	{
-		return GetState().mouseY;
-	}
+	float Input::GetMouseX() { return GetState().mouseX; }
+	float Input::GetMouseY() { return GetState().mouseY; }
 
 	std::pair<float, float> Input::GetMousePosition()
 	{
@@ -172,12 +142,9 @@ namespace rm
 		return { s.mouseX, s.mouseY };
 	}
 
-	float Input::GetScrollDeltaY()
-	{
-		return GetState().scrollDeltaY;
-	}
+	float Input::GetScrollDeltaY() { return GetState().scrollDeltaY; }
 
-	// --- Internal setters (not used externally right now, but kept for future refactors) ---
+	// --- Internal setters ---
 
 	void Input::SetKey(int key, bool down)
 	{
@@ -205,4 +172,4 @@ namespace rm
 		auto& s = GetState();
 		s.scrollDeltaY += yOffset;
 	}
-} // rm namespace
+}
