@@ -23,7 +23,12 @@ namespace rm
 		void Run();
 		void Shutdown();
 
+		void OnEvent(Event& e);
+
 	private:
+		bool OnWindowClose(class WindowCloseEvent& e);
+		bool OnWindowResize(class WindowResizeEvent& e);
+
 		std::unique_ptr<Window> window;
 		bool isRunning = false;
 	};

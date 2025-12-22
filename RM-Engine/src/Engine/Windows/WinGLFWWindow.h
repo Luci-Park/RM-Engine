@@ -29,19 +29,25 @@ namespace rm
 
 		void Update() override;
 
+		void SetEventCallback(const EventCallbackFn& callback) override
+		{
+			windowData.EventCallback = callback;
+		}
+
 		void* NativeWindow() const override { return window; }
 
 	private:
 		void Init(const WindowProps& props);
 		void Shutdown();
 
-	private:
 		struct WindowData
 		{
 			std::string Title;
 			int Width = 0;
 			int Height = 0;
 			bool VSync = true;
+
+			EventCallbackFn EventCallback;
 		};
 
 		WindowData windowData;
