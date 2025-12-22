@@ -10,8 +10,12 @@ function CopyRuntimeDLL(name, dllFileName)
         return
     end
 
+    local src = '%{wks.location}/' .. BinDir[name] .. '/' .. dllFileName
+    local dst = '%{cfg.targetdir}/' .. dllFileName
+
     postbuildcommands {
-        ('{COPYFILE} "%s/%s" "%s/%s"'):format(BinDir[name], dllFileName, "%{cfg.targetdir}", dllFileName)
+        '{MKDIR} "%{cfg.targetdir}"',
+        '{COPYFILE} "' .. src .. '" "' .. dst .. '"'
     }
 end
 
