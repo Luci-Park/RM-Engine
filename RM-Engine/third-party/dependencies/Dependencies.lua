@@ -22,7 +22,7 @@ IncludeDir["spdlog"] = ThirdParty.HeaderOnly .. "/spdlog/include"
 -- =========================
 IncludeDir["glfw"] = ThirdParty.Prebuilt .. "/glfw/include"
 LibDir["glfw"]     = ThirdParty.Prebuilt .. "/glfw/lib-vc2022"
-BinDir["glfw"]     = ThirdParty.Prebuilt .. "/glfw/lib-vc2022
+BinDir["glfw"]     = ThirdParty.Prebuilt .. "/glfw/lib-vc2022"
 
 -- =========================
 -- CMake-built dependencies (installed output)
