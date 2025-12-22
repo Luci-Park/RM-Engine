@@ -1,7 +1,7 @@
 /**
  * @file Event.h
  * @author rahul
- * @brief // TODO: Add a brief description of this header
+ * @brief // Core event base types and dispatcher for engine-wide event handling.
  * @version 0.1
  * @date 12/22/2025 7:47:43 AM
  *

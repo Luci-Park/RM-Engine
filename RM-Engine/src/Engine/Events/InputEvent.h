@@ -1,7 +1,7 @@
 /**
  * @file InputEvent.h
  * @author rahul
- * @brief // TODO: Add a brief description of this header
+ * @brief // Engine-defined input events for keyboard and mouse interactions.
  * @version 0.1
  * @date 12/22/2025 7:55:38 AM
  *
@@ -41,7 +41,7 @@ namespace rm
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << (int)m_Key << " (" << m_RepeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << static_cast<int>(m_Key) << " (" << m_RepeatCount << " repeats)";
 			return ss.str();
 		}
 
@@ -61,7 +61,7 @@ namespace rm
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << (int)m_Key;
+			ss << "KeyReleasedEvent: " << static_cast<int>(m_Key);
 			return ss.str();
 		}
 

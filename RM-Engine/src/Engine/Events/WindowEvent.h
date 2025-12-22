@@ -1,7 +1,7 @@
 /**
  * @file WindowEvent.h
  * @author rahul
- * @brief // TODO: Add a brief description of this header
+ * @brief // Engine window events such as resize and close notifications.
  * @version 0.1
  * @date 12/22/2025 7:54:42 AM
  *
