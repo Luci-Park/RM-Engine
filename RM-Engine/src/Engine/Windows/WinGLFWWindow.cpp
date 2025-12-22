@@ -14,7 +14,8 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Engine/Input/Input.h"
+#include "GLFWInputMapper.h"
+#include "Engine/Input/InputService.h"
 
 namespace rm
 {
@@ -27,6 +28,7 @@ namespace rm
 	{
 		Shutdown();
 	}
+
 	void WinGLFWwindow::Init(const WindowProps& props)
 	{
 		windowData.Title = props.Title;
@@ -47,7 +49,37 @@ namespace rm
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
 
-		Input::Init(window);
+		InputService::Init();
+
+		// GLFW callbacks owned by the window (platform-owned)
+		glfwSetKeyCallback(window, [](GLFWwindow* /*w*/, int key, int /*scancode*/, int action, int /*mods*/)
+			{
+				Key k = GLFWInputMapper::ToKey(key);
+				if (k == Key::Unknown) return;
+
+				if (action == GLFW_PRESS)         InputService::OnKey(k, true);
+				else if (action == GLFW_RELEASE)  InputService::OnKey(k, false);
+				else if (action == GLFW_REPEAT)   InputService::OnKey(k, true);
+			});
+
+		glfwSetMouseButtonCallback(window, [](GLFWwindow* /*w*/, int button, int action, int /*mods*/)
+			{
+				MouseButton b = GLFWInputMapper::ToMouseButton(button);
+				if (b == MouseButton::Unknown) return;
+
+				if (action == GLFW_PRESS)         InputService::OnMouseButton(b, true);
+				else if (action == GLFW_RELEASE)  InputService::OnMouseButton(b, false);
+			});
+
+		glfwSetCursorPosCallback(window, [](GLFWwindow* /*w*/, double xPos, double yPos)
+			{
+				InputService::OnMouseMove(static_cast<float>(xPos), static_cast<float>(yPos));
+			});
+
+		glfwSetScrollCallback(window, [](GLFWwindow* /*w*/, double /*xOffset*/, double yOffset)
+			{
+				InputService::OnScroll(static_cast<float>(yOffset));
+			});
 
 		SetVsync(windowData.VSync);
 		
@@ -65,7 +97,7 @@ namespace rm
 
 	void WinGLFWwindow::Update()
 	{
-		Input::BeginFrame();
+		InputService::BeginFrame();
 
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -76,7 +108,7 @@ namespace rm
 
 	void WinGLFWwindow::Shutdown()
 	{
-		Input::Shutdown();
+		InputService::Shutdown();
 
 		glfwDestroyWindow(window);
 		window = nullptr;

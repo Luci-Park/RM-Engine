@@ -11,9 +11,9 @@
 
 #include "pch.h"
 #include "Application.h"
-#include <GLFW/glfw3.h>
+#include "Input/InputService.h"
+#include "Windows/WinGLFWWindow.h"
 
-#include "Input/Input.h"
 
 namespace rm
 {
@@ -29,9 +29,13 @@ namespace rm
 		while (isRunning)
 		{
 			window->Update();
-			if (Input::IsKeyPressed(GLFW_KEY_SPACE))
+			if (InputService::IsKeyPressed(Key::Space))
 			{
 				LOG_INFO("Space bar is pressed.");
+			}
+			if (InputService::IsMousePressed(MouseButton::Left))
+			{
+				LOG_INFO("Left mouse button is clicked.");
 			}
 		}
 	}
