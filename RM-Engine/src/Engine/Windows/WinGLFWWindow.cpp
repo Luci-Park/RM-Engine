@@ -17,7 +17,7 @@
 #include "GLFWInputMapper.h"
 #include "Engine/Events/InputEvent.h"
 #include "Engine/Events/WindowEvent.h"
-#include "Engine/Input/InputService.h"
+#include "Engine/Input/Input.h"
 
 namespace rm
 {
@@ -51,7 +51,7 @@ namespace rm
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
 
-		InputService::Init();
+		Input::Init();
 
 		// ----- Window events -----
 
@@ -82,19 +82,19 @@ namespace rm
 
 				if (action == GLFW_PRESS)
 				{
-					InputService::OnKey(k, true);
+					Input::OnKey(k, true);
 					KeyPressedEvent e(k, 0);
 					if (data.EventCallback) data.EventCallback(e);
 				}
 				else if (action == GLFW_RELEASE)
 				{
-					InputService::OnKey(k, false);
+					Input::OnKey(k, false);
 					KeyReleasedEvent e(k);
 					if (data.EventCallback) data.EventCallback(e);
 				}
 				else if (action == GLFW_REPEAT)
 				{
-					InputService::OnKey(k, true);
+					Input::OnKey(k, true);
 					KeyPressedEvent e(k, 1);
 					if (data.EventCallback) data.EventCallback(e);
 				}
@@ -108,13 +108,13 @@ namespace rm
 
 				if (action == GLFW_PRESS)
 				{
-					InputService::OnMouseButton(b, true);
+					Input::OnMouseButton(b, true);
 					MouseButtonPressedEvent e(b);
 					if (data.EventCallback) data.EventCallback(e);
 				}
 				else if (action == GLFW_RELEASE)
 				{
-					InputService::OnMouseButton(b, false);
+					Input::OnMouseButton(b, false);
 					MouseButtonReleasedEvent e(b);
 					if (data.EventCallback) data.EventCallback(e);
 				}
@@ -126,7 +126,7 @@ namespace rm
 				float x = static_cast<float>(xPos);
 				float y = static_cast<float>(yPos);
 
-				InputService::OnMouseMove(x, y);
+				Input::OnMouseMove(x, y);
 				MouseMovedEvent e(x, y);
 				if (data.EventCallback) data.EventCallback(e);
 			});
@@ -137,7 +137,7 @@ namespace rm
 				float xo = static_cast<float>(xOffset);
 				float yo = static_cast<float>(yOffset);
 
-				InputService::OnScroll(yo);
+				Input::OnScroll(yo);
 				MouseScrolledEvent e(xo, yo);
 				if (data.EventCallback) data.EventCallback(e);
 			});
@@ -158,7 +158,7 @@ namespace rm
 
 	void WinGLFWwindow::Update()
 	{
-		InputService::BeginFrame();
+		Input::BeginFrame();
 
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -169,7 +169,7 @@ namespace rm
 
 	void WinGLFWwindow::Shutdown()
 	{
-		InputService::Shutdown();
+		Input::Shutdown();
 
 		glfwDestroyWindow(window);
 		window = nullptr;

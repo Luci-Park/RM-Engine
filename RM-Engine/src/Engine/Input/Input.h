@@ -16,7 +16,7 @@
 
 namespace rm
 {
-	class InputService
+	class Input
 	{
 	public:
         // Call once on engine start (no platform knowledge)
@@ -46,7 +46,7 @@ namespace rm
         static void OnMouseMove(float x, float y);
         static void OnScroll(float yOffset);
 	private:
-        InputService() = delete;
+        Input() = delete;
 
         struct State
         {

@@ -10,49 +10,49 @@
  */
 
 #include "pch.h"
-#include "InputService.h"
+#include "Input.h"
 
 namespace rm
 {
-    InputService::State& InputService::GetState()
+    Input::State& Input::GetState()
     {
         static State s{};
         return s;
     }
 
-    int InputService::KeyIndex(Key key)
+    int Input::KeyIndex(Key key)
     {
         auto v = static_cast<int>(key);
         if (v <= 0 || v >= State::MaxKeys) return -1;
         return v;
     }
 
-    int InputService::MouseIndex(MouseButton button)
+    int Input::MouseIndex(MouseButton button)
     {
         int v = (button == MouseButton::Unknown) ? -1 : static_cast<int>(button);
         if (v < 0 || v >= State::MaxMouseButtons) return -1;
         return v;
     }
 
-    void InputService::Init()
+    void Input::Init()
     {
         auto& s = GetState();
         s = State{};
         s.initialized = true;
-        LOG_INFO("InputService initialized.");
+        LOG_INFO("Input initialized.");
     }
 
-    void InputService::Shutdown()
+    void Input::Shutdown()
     {
         auto& s = GetState();
         s = State{};
-        LOG_INFO("InputService shutdown.");
+        LOG_INFO("Input shutdown.");
     }
 
-    void InputService::BeginFrame()
+    void Input::BeginFrame()
     {
         auto& s = GetState();
-        RM_ASSERT(s.initialized && "InputService::Init must be called before BeginFrame.");
+        RM_ASSERT(s.initialized && "Input::Init must be called before BeginFrame.");
 
         std::memcpy(s.prevKeys, s.keys, sizeof(s.keys));
         std::memcpy(s.prevMouse, s.mouse, sizeof(s.mouse));
@@ -60,61 +60,61 @@ namespace rm
     }
 
     // -------- Queries --------
-    bool InputService::IsKeyDown(Key key)
+    bool Input::IsKeyDown(Key key)
     {
         const auto& s = GetState();
         int i = KeyIndex(key);
         return i >= 0 && s.keys[i];
     }
 
-    bool InputService::IsKeyPressed(Key key)
+    bool Input::IsKeyPressed(Key key)
     {
         const auto& s = GetState();
         int i = KeyIndex(key);
         return i >= 0 && s.keys[i] && !s.prevKeys[i];
     }
 
-    bool InputService::IsKeyReleased(Key key)
+    bool Input::IsKeyReleased(Key key)
     {
         const auto& s = GetState();
         int i = KeyIndex(key);
         return i >= 0 && !s.keys[i] && s.prevKeys[i];
     }
 
-    bool InputService::IsMouseDown(MouseButton button)
+    bool Input::IsMouseDown(MouseButton button)
     {
         const auto& s = GetState();
         int i = MouseIndex(button);
         return i >= 0 && s.mouse[i];
     }
 
-    bool InputService::IsMousePressed(MouseButton button)
+    bool Input::IsMousePressed(MouseButton button)
     {
         const auto& s = GetState();
         int i = MouseIndex(button);
         return i >= 0 && s.mouse[i] && !s.prevMouse[i];
     }
 
-    bool InputService::IsMouseReleased(MouseButton button)
+    bool Input::IsMouseReleased(MouseButton button)
     {
         const auto& s = GetState();
         int i = MouseIndex(button);
         return i >= 0 && !s.mouse[i] && s.prevMouse[i];
     }
 
-    float InputService::GetMouseX() { return GetState().mouseX; }
-    float InputService::GetMouseY() { return GetState().mouseY; }
+    float Input::GetMouseX() { return GetState().mouseX; }
+    float Input::GetMouseY() { return GetState().mouseY; }
 
-    std::pair<float, float> InputService::GetMousePosition()
+    std::pair<float, float> Input::GetMousePosition()
     {
         const auto& s = GetState();
         return { s.mouseX, s.mouseY };
     }
 
-    float InputService::GetScrollDeltaY() { return GetState().scrollDeltaY; }
+    float Input::GetScrollDeltaY() { return GetState().scrollDeltaY; }
 
     // -------- Event sinks (called by platform) --------
-    void InputService::OnKey(Key key, bool down)
+    void Input::OnKey(Key key, bool down)
     {
         auto& s = GetState();
         int i = KeyIndex(key);
@@ -122,7 +122,7 @@ namespace rm
         s.keys[i] = down;
     }
 
-    void InputService::OnMouseButton(MouseButton button, bool down)
+    void Input::OnMouseButton(MouseButton button, bool down)
     {
         auto& s = GetState();
         int i = MouseIndex(button);
@@ -130,14 +130,14 @@ namespace rm
         s.mouse[i] = down;
     }
 
-    void InputService::OnMouseMove(float x, float y)
+    void Input::OnMouseMove(float x, float y)
     {
         auto& s = GetState();
         s.mouseX = x;
         s.mouseY = y;
     }
 
-    void InputService::OnScroll(float yOffset)
+    void Input::OnScroll(float yOffset)
     {
         auto& s = GetState();
         s.scrollDeltaY += yOffset;
