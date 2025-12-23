@@ -38,7 +38,7 @@ namespace rm
 		{
 			// Clear "pressed/released this frame" BEFORE glfwPollEvents fires callbacks
 			Input::BeginFrame();
-			window->Update();
+			window->PollEvents();
 
 			if (Input::IsKeyPressed(Key::Space))
 			{

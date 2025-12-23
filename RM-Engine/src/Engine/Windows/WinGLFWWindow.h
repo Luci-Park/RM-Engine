@@ -27,7 +27,7 @@ namespace rm
 		
 		void SetVsync(bool enable) override;
 
-		void Update() override;
+		void PollEvents() override;
 
 		void SetEventCallback(const EventCallbackFn& callback) override
 		{

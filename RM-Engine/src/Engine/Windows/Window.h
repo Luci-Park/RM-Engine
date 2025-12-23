@@ -35,7 +35,7 @@ namespace rm
 
 		virtual void SetVsync(bool enable) = 0;
 
-		virtual void Update() = 0;
+		virtual void PollEvents() = 0;
 
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 
