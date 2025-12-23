@@ -1,16 +1,21 @@
 -- Central registry of third-party dependency paths
 
 ThirdParty = {}
-ThirdParty.Root      = "RM-Engine/third-party"
-ThirdParty.HeaderOnly= ThirdParty.Root .. "/header-only"
-ThirdParty.Prebuilt  = ThirdParty.Root .. "/prebuilt"
-ThirdParty.Source    = ThirdParty.Root .. "/source"
-ThirdParty.Build     = ThirdParty.Root .. "/build"
-ThirdParty.Install   = ThirdParty.Root .. "/install"
+ThirdParty.Root       = "RM-Engine/third-party"
+ThirdParty.HeaderOnly = ThirdParty.Root .. "/header-only"
+ThirdParty.Prebuilt   = ThirdParty.Root .. "/prebuilt"
+ThirdParty.Source     = ThirdParty.Root .. "/source"
+ThirdParty.Build      = ThirdParty.Root .. "/build"
+ThirdParty.Install    = ThirdParty.Root .. "/install"
 
 IncludeDir = {}
 LibDir     = {}
 BinDir     = {}
+
+-- =========================
+-- Source-built (compiled into engine)
+-- =========================
+IncludeDir["glad"] = ThirdParty.Source .. "/glad/include"
 
 -- =========================
 -- Header-only dependencies

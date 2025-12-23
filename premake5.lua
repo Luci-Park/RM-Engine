@@ -74,6 +74,9 @@ project (engineName)
     {
         "%{prj.name}/src",
 
+        -- Source deps (example; GLAD)
+        IncludeDir["glad"],
+
         -- Header-only deps (example: spdlog)
         IncludeDir["spdlog"],
 
