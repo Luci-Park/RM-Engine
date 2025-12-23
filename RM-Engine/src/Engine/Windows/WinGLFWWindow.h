@@ -11,15 +11,15 @@
 
 #pragma once
 #include "Window.h"
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace rm
 {
-	class WinGLFWWindow final : public Window
+	class WinGLFWwindow final : public Window
 	{
 	public:
-		WinGLFWWindow(const WindowProps& props);
-		~WinGLFWWindow() override;
+		WinGLFWwindow(const WindowProps& props);
+		~WinGLFWwindow() override;
 
 		uint32_t GetWidth() const override { return windowData.Width; }
 		uint32_t GetHeight() const override { return windowData.Height; }
@@ -29,19 +29,25 @@ namespace rm
 
 		void Update() override;
 
+		void SetEventCallback(const EventCallbackFn& callback) override
+		{
+			windowData.EventCallback = callback;
+		}
+
 		void* NativeWindow() const override { return window; }
 
 	private:
 		void Init(const WindowProps& props);
-		void ShutDown();
+		void Shutdown();
 
-	private:
 		struct WindowData
 		{
-			std::string Title = "";
+			std::string Title;
 			int Width = 0;
 			int Height = 0;
 			bool VSync = true;
+
+			EventCallbackFn EventCallback;
 		};
 
 		WindowData windowData;

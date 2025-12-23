@@ -12,12 +12,12 @@
 #include "pch.h"
 #include "Window.h"
 
-#include "WinGLFWWindow.h"
+#include "WinGLFWwindow.h"
 
 namespace rm
 {
 	std::unique_ptr<Window> Window::Create(const WindowProps& props)
 	{
-		return std::make_unique<WinGLFWWindow>(props);
+		return std::make_unique<WinGLFWwindow>(props);
 	}
 } // rm namespace
