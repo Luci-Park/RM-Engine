@@ -1,5 +1,5 @@
 /**
- * @file InputService.cpp
+ * @file Input.cpp
  * @author rahul
  * @brief // Centralized, platform-independent input service providing frame-based input queries.
  * @version 0.1
@@ -11,6 +11,10 @@
 
 #include "pch.h"
 #include "Input.h"
+
+#include "Engine/Events/Event.h"
+#include "Engine/Events/InputEvent.h"
+#include "Engine/Events/WindowEvent.h"
 
 namespace rm
 {
@@ -60,6 +64,7 @@ namespace rm
     }
 
     // -------- Queries --------
+
     bool Input::IsKeyDown(Key key)
     {
         const auto& s = GetState();
@@ -114,6 +119,7 @@ namespace rm
     float Input::GetScrollDeltaY() { return GetState().scrollDeltaY; }
 
     // -------- Event sinks (called by platform) --------
+
     void Input::OnKey(Key key, bool down)
     {
         auto& s = GetState();
@@ -142,4 +148,65 @@ namespace rm
         auto& s = GetState();
         s.scrollDeltaY += yOffset;
     }
+
+    void Input::ClearAll()
+    {
+        auto& s = GetState();
+        std::memset(s.keys, 0, sizeof(s.keys));
+        std::memset(s.prevKeys, 0, sizeof(s.prevKeys));
+        std::memset(s.mouse, 0, sizeof(s.mouse));
+        std::memset(s.prevMouse, 0, sizeof(s.prevMouse));
+        s.scrollDeltaY = 0.0f;
+    }
+
+    void Input::OnEvent(Event& e)
+    {
+        auto& s = GetState();
+        RM_ASSERT(s.initialized && "Input::Init must be called before Input::OnEvent.");
+
+        EventDispatcher d(e);
+
+        d.Dispatch<KeyPressedEvent>([](KeyPressedEvent& ev)
+            {
+                OnKey(ev.GetKeyCode(), true);
+                return false;
+            });
+
+        d.Dispatch<KeyReleasedEvent>([](KeyReleasedEvent& ev)
+            {
+                OnKey(ev.GetKeyCode(), false);
+                return false;
+            });
+
+        d.Dispatch<MouseButtonPressedEvent>([](MouseButtonPressedEvent& ev)
+            {
+                OnMouseButton(ev.GetMouseButton(), true);
+                return false;
+            });
+
+        d.Dispatch<MouseButtonReleasedEvent>([](MouseButtonReleasedEvent& ev)
+            {
+                OnMouseButton(ev.GetMouseButton(), false);
+                return false;
+            });
+
+        d.Dispatch<MouseMovedEvent>([](MouseMovedEvent& ev)
+            {
+                OnMouseMove(ev.GetX(), ev.GetY());
+                return false;
+            });
+
+        d.Dispatch<MouseScrolledEvent>([](MouseScrolledEvent& ev)
+            {
+                OnScroll(ev.GetYOffset());
+                return false;
+            });
+
+        d.Dispatch<WindowLostFocusEvent>([](WindowLostFocusEvent&)
+            {
+                ClearAll();
+                return false;
+            });
+    }
+
 } // rm namespace

@@ -1,5 +1,5 @@
 /**
- * @file InputService.h
+ * @file Input.h
  * @author rahul
  * @brief // Centralized, platform-independent input service providing frame-based input queries.
  * @version 0.1
@@ -13,6 +13,7 @@
 
 #include <utility>
 #include "InputCodes.h"
+#include "Engine/Events/Event.h"
 
 namespace rm
 {
@@ -27,6 +28,7 @@ namespace rm
         static void BeginFrame();
 
         // --- Queries (Engine-facing) ---
+
         static bool IsKeyDown(Key key);
         static bool IsKeyPressed(Key key);
         static bool IsKeyReleased(Key key);
@@ -40,12 +42,17 @@ namespace rm
         static std::pair<float, float> GetMousePosition();
         static float GetScrollDeltaY();
 
-        // --- Event sinks (Platform-facing; WinGLFWwindow calls these) ---
+        // --- Event sinks (Platform-facing) ---
+
         static void OnKey(Key key, bool down);
         static void OnMouseButton(MouseButton button, bool down);
         static void OnMouseMove(float x, float y);
         static void OnScroll(float yOffset);
-	private:
+        static void OnEvent(Event& event);
+
+        static void ClearAll();
+
+    private:
         Input() = delete;
 
         struct State

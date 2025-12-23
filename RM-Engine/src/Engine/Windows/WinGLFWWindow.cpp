@@ -17,7 +17,6 @@
 #include "GLFWInputMapper.h"
 #include "Engine/Events/InputEvent.h"
 #include "Engine/Events/WindowEvent.h"
-#include "Engine/Input/Input.h"
 
 namespace rm
 {
@@ -51,8 +50,6 @@ namespace rm
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
 
-		Input::Init();
-
 		// ----- Window events -----
 
 		glfwSetWindowCloseCallback(window, [](GLFWwindow* w)
@@ -72,29 +69,46 @@ namespace rm
 				if (data.EventCallback) data.EventCallback(e);
 			});
 
+		glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int focused)
+			{
+				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
+				if (!data.EventCallback) return;
+
+				if (focused)
+				{
+					rm::WindowFocusEvent e;
+					data.EventCallback(e);
+				}
+				else
+				{
+					rm::WindowLostFocusEvent e;
+					data.EventCallback(e);
+				}
+			});
+
+
+
 		// ----- Input events + polling state -----
 
 		glfwSetKeyCallback(window, [](GLFWwindow* w, int key, int /*scancode*/, int action, int /*mods*/)
 			{
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				Key k = GLFWInputMapper::ToKey(key);
+
 				if (k == Key::Unknown) return;
 
 				if (action == GLFW_PRESS)
 				{
-					Input::OnKey(k, true);
 					KeyPressedEvent e(k, 0);
 					if (data.EventCallback) data.EventCallback(e);
 				}
 				else if (action == GLFW_RELEASE)
 				{
-					Input::OnKey(k, false);
 					KeyReleasedEvent e(k);
 					if (data.EventCallback) data.EventCallback(e);
 				}
 				else if (action == GLFW_REPEAT)
 				{
-					Input::OnKey(k, true);
 					KeyPressedEvent e(k, 1);
 					if (data.EventCallback) data.EventCallback(e);
 				}
@@ -104,17 +118,16 @@ namespace rm
 			{
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				MouseButton b = GLFWInputMapper::ToMouseButton(button);
+
 				if (b == MouseButton::Unknown) return;
 
 				if (action == GLFW_PRESS)
 				{
-					Input::OnMouseButton(b, true);
 					MouseButtonPressedEvent e(b);
 					if (data.EventCallback) data.EventCallback(e);
 				}
 				else if (action == GLFW_RELEASE)
 				{
-					Input::OnMouseButton(b, false);
 					MouseButtonReleasedEvent e(b);
 					if (data.EventCallback) data.EventCallback(e);
 				}
@@ -126,7 +139,6 @@ namespace rm
 				float x = static_cast<float>(xPos);
 				float y = static_cast<float>(yPos);
 
-				Input::OnMouseMove(x, y);
 				MouseMovedEvent e(x, y);
 				if (data.EventCallback) data.EventCallback(e);
 			});
@@ -137,7 +149,6 @@ namespace rm
 				float xo = static_cast<float>(xOffset);
 				float yo = static_cast<float>(yOffset);
 
-				Input::OnScroll(yo);
 				MouseScrolledEvent e(xo, yo);
 				if (data.EventCallback) data.EventCallback(e);
 			});
@@ -158,8 +169,6 @@ namespace rm
 
 	void WinGLFWwindow::Update()
 	{
-		Input::BeginFrame();
-
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -169,8 +178,6 @@ namespace rm
 
 	void WinGLFWwindow::Shutdown()
 	{
-		Input::Shutdown();
-
 		glfwDestroyWindow(window);
 		window = nullptr;
 		glfwTerminate();

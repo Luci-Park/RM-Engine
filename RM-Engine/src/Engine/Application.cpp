@@ -13,17 +13,22 @@
 #include "Application.h"
 
 #include "Windows/WinGLFWWindow.h"
+
 #include "Engine/Events/WindowEvent.h"
 #include "Engine/Events/Event.h"
+
+#include "Input/Input.h"
 
 
 namespace rm
 {
-	GLFWwindow* window = nullptr;
 	void Application::Init()
 	{
 		window = Window::Create();
 		window->SetEventCallback([this](Event& e) { OnEvent(e); });
+
+		Input::Init();
+
 		isRunning = true;
 	}
 
@@ -31,18 +36,38 @@ namespace rm
 	{
 		while (isRunning)
 		{
+			// Clear "pressed/released this frame" BEFORE glfwPollEvents fires callbacks
+			Input::BeginFrame();
 			window->Update();
+
+			if (Input::IsKeyPressed(Key::Space))
+			{
+				LOG_INFO("SPACE PRESSED");
+			}
+
+			if (Input::IsKeyDown(Key::Space))
+			{
+				LOG_INFO("SPACE HELD");
+			}
+
+			if (Input::IsKeyReleased(Key::Space))
+			{
+				LOG_INFO("SPACE RELEASED");
+			}
 		}
 	}
 
 	void Application::Shutdown()
 	{
 		isRunning = false;
+
+		Input::Shutdown();
 		window.reset();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
+		Input::OnEvent(e);
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& ev)

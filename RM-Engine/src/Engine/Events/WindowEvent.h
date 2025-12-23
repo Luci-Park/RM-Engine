@@ -49,4 +49,22 @@ namespace rm
 		RM_EVENT_CLASS_CATEGORY(EventCategoryWindow)
 	};
 
+	class WindowFocusEvent : public Event
+	{
+	public:
+		WindowFocusEvent() = default;
+
+		RM_EVENT_CLASS_TYPE(WindowFocus)
+		RM_EVENT_CLASS_CATEGORY(EventCategoryWindow)
+	};
+
+	class WindowLostFocusEvent : public Event
+	{
+	public:
+		WindowLostFocusEvent() = default;
+
+		RM_EVENT_CLASS_TYPE(WindowLostFocus)
+		RM_EVENT_CLASS_CATEGORY(EventCategoryWindow)
+	};
+
 } // rm namespace

@@ -21,6 +21,8 @@ namespace rm
         // Window
         WindowClose,
         WindowResize,
+        WindowFocus,
+        WindowLostFocus,
 
         // Keyboard
         KeyPressed,
