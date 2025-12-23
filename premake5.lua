@@ -1,31 +1,69 @@
-
 workspace "RM-Engine"
     configurations { "Debug", "Release" }
     architecture "x64"
     startproject "Sandbox"
+
+-- ---------------------------------------------------------
+-- Project names and directories
+-- ---------------------------------------------------------
 
 engineName = "RM-Engine"
 launcherName = "RM-Launcher"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- Include directories relative to root folder (solution directory)
-IncludeDir = {}
-IncludeDir["GLFW"] = engineName .. "/third-party/glfw"
+-- ---------------------------------------------------------
+-- Third-party dependencies registry
+-- ---------------------------------------------------------
+dofile("RM-Engine/third-party/dependencies/Dependencies.lua")
+dofile("RM-Engine/third-party/dependencies/ThirdPartyHelpers.lua")
 
+-- ---------------------------------------------------------
+-- Common settings helper
+-- ---------------------------------------------------------
+function ApplyCommonSettings()
+    language "C++"
+    cppdialect "C++20"
+    staticruntime "off"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    buildoptions { "/utf-8" }
+
+    filter "system:windows"
+        systemversion "latest"
+        defines { "RM_PLATFORM_WINDOWS" }
+
+    filter "toolset:msc*"
+        buildoptions { "/Zc:preprocessor" }
+
+    filter "configurations:Debug"
+        runtime "Debug"
+        symbols "On"
+        defines { "RM_DEBUG" }
+
+    filter "configurations:Release"
+        runtime "Release"
+        optimize "On"
+        defines { "RM_RELEASE" }
+
+    filter {}
+end
+
+-- =========================================================
+-- RM-Engine (Static Library)
+-- =========================================================
 
 project (engineName)
     location (engineName)
     kind "StaticLib"
-    language "C++"
-    cppdialect "C++20"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    ApplyCommonSettings()
 
     pchheader "pch.h"
     pchsource "%{prj.name}/src/pch.cpp"
-    
+
     files
     {
         "%{prj.name}/src/**.h",
@@ -34,27 +72,29 @@ project (engineName)
 
     includedirs
     {
-        "%{prj.name}/third-party/spdlog/include",
-        IncludeDir.GLFW .. "/include",
-        engineName .. "/src"
+        "%{prj.name}/src",
+
+        -- Source deps (example; GLAD)
+        IncludeDir["glad"],
+
+        -- Header-only deps (example: spdlog)
+        IncludeDir["spdlog"],
+
+        -- Prebuilt deps (example: GLFW)
+        IncludeDir["glfw"],
     }
 
-	buildoptions { "/utf-8" }
-    
-    filter "system:windows"
-        systemversion "latest"
+    -- If you want engine itself to link to some libs, do it here.
 
-    filter "toolset:msc*"
-        buildoptions { "/Zc:preprocessor" }
+-- =========================================================
+-- RM-Launcher (Static Library)
+-- =========================================================
 
 project (launcherName)
     location (launcherName)
     kind "StaticLib"
-    language "C++"
-    cppdialect "C++20"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    ApplyCommonSettings()
 
     pchheader "pch.h"
     pchsource "%{prj.name}/src/pch.cpp"
@@ -72,30 +112,22 @@ project (launcherName)
 
     links
     {
-        (engineName)
+        engineName
     }
-	
-	buildoptions { "/utf-8" }
 
-    filter "system:windows"
-        systemversion "latest"
-
-    filter "toolset:msc*"
-        buildoptions { "/Zc:preprocessor" }
-
+-- =========================================================
+-- Sandbox (Console Application)
+-- =========================================================
 
 project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++20"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-    
+    ApplyCommonSettings()
+
     pchheader "pch.h"
     pchsource "%{prj.name}/src/pch.cpp"
-    
+
     files
     {
         "%{prj.name}/src/**.h",
@@ -109,29 +141,23 @@ project "Sandbox"
 
     links
     {
-        (launcherName),
-        "glfw3dll.lib",
+        launcherName,
         "opengl32.lib",
         "user32.lib",
         "gdi32.lib",
-        "shell32.lib"
+        "shell32.lib",
     }
 
-    libdirs
-    {
-        IncludeDir.GLFW .. "/lib-vc2022"
-    }
-	
-	buildoptions { "/utf-8" }
+    -- -------------------------
+    -- Prebuilt dependency: GLFW
+    -- -------------------------
+    LinkPrebuilt("glfw", { "glfw3dll.lib" })
+    CopyRuntimeDLL("glfw", "glfw3.dll")
 
-    postbuildcommands
-    {
-        '{COPYFILE} "%{wks.location}/RM-Engine/third-party/glfw/lib-vc2022/glfw3.dll" "%{cfg.targetdir}/glfw3.dll"'
-    }
+    -- -------------------------
+    -- Example: CMake-installed dependency (if you add one)
+    -- -------------------------
+    -- LinkInstalled("assimp", { "assimp-vc143-mt.lib" }) -- (name differs per build; set yours)
+    -- CopyRuntimeDLL("assimp", "assimp-vc143-mt.dll")
 
-    filter "system:windows"
-        systemversion "latest"
-
-
-    filter "toolset:msc*"
-        buildoptions { "/Zc:preprocessor" }
+    filter {}
