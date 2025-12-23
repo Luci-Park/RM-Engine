@@ -11,18 +11,11 @@
 
 #pragma once
 #include <memory>
-#include <string>
 #include "Engine/Events/Event.h"
+#include "Engine/EngineConfig.h"
 
 namespace rm
 {
-	struct WindowProps
-	{
-		std::string Title = "RM-Engine";
-		uint32_t Width = 1600;
-		uint32_t Height = 900;
-		bool VSync = true;
-	};
 
 	class Window
 	{
@@ -41,7 +34,7 @@ namespace rm
 
 		virtual void* NativeWindow() const = 0;
 
-		static std::unique_ptr<Window> Create(const WindowProps& props = {});
+		static std::unique_ptr<Window> Create(const EngineConfig& config = {});
 
 	protected:
 		Window() = default;

@@ -16,8 +16,8 @@
 
 namespace rm
 {
-	std::unique_ptr<Window> Window::Create(const WindowProps& props)
+	std::unique_ptr<Window> Window::Create(const EngineConfig& config)
 	{
-		return std::make_unique<WinGLFWwindow>(props);
+		return std::make_unique<WinGLFWwindow>(config);
 	}
 } // rm namespace

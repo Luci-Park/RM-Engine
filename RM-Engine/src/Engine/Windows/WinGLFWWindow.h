@@ -18,7 +18,7 @@ namespace rm
 	class WinGLFWwindow final : public Window
 	{
 	public:
-		WinGLFWwindow(const WindowProps& props);
+		WinGLFWwindow(const EngineConfig& config);
 		~WinGLFWwindow() override;
 
 		uint32_t GetWidth() const override { return windowData.Width; }
@@ -37,7 +37,10 @@ namespace rm
 		void* NativeWindow() const override { return window; }
 
 	private:
-		void Init(const WindowProps& props);
+		void Init(const EngineConfig& config);
+		void SetWindowDesc(const WindowDesc& desc);
+		void SetRenderConfig(const RenderConfig& render);
+
 		void Shutdown();
 
 		struct WindowData

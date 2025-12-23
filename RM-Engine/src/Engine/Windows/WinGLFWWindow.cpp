@@ -20,9 +20,9 @@
 
 namespace rm
 {
-	WinGLFWwindow::WinGLFWwindow(const WindowProps& props)
+	WinGLFWwindow::WinGLFWwindow(const EngineConfig& config)
 	{
-		Init(props);
+		Init(config);
 	}
 
 	WinGLFWwindow::~WinGLFWwindow()
@@ -30,20 +30,15 @@ namespace rm
 		Shutdown();
 	}
 
-	void WinGLFWwindow::Init(const WindowProps& props)
+	void WinGLFWwindow::Init(const EngineConfig& config)
 	{
-		windowData.Title = props.Title;
-		windowData.Width = static_cast<int>(props.Width);
-		windowData.Height = static_cast<int>(props.Height);
-		windowData.VSync = props.VSync;
-
 		RM_ASSERT(glfwInit());
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		SetWindowDesc(config.Window);
+		SetRenderConfig(config.Render);
 
 		window = glfwCreateWindow(windowData.Width, windowData.Height, windowData.Title.c_str()
-			, nullptr, nullptr);
+		                          , nullptr, nullptr);
 
 		RM_ASSERT(window);
 
@@ -155,6 +150,28 @@ namespace rm
 
 		SetVsync(windowData.VSync);
 		
+	}
+
+	void WinGLFWwindow::SetWindowDesc(const WindowDesc& desc)
+	{
+		windowData.Title = desc.Title;
+		windowData.Width = static_cast<int>(desc.Width);
+		windowData.Height = static_cast<int>(desc.Height);
+		windowData.VSync = desc.VSync;
+
+		glfwWindowHint(GLFW_RESIZABLE, desc.Resizable ? GLFW_TRUE : GLFW_FALSE);
+	}
+
+	void WinGLFWwindow::SetRenderConfig(const RenderConfig& render)
+	{
+		int api;
+		switch (render.Api)
+		{
+		case GraphicsAPI::OpenGL: api = GLFW_OPENGL_API; break;
+		}
+		glfwWindowHint(GLFW_CLIENT_API, api);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, render.GLMajor);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, render.GLMinor);
 	}
 
 	void WinGLFWwindow::SetVsync(bool enable)
