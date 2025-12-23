@@ -6,6 +6,20 @@
 /[Ll]og/
 
 *.log
+
+# ===============================
+# Third-Party Generated Files
+# ===============================
+# CMake build trees
+RM-Engine/third-party/build/
+RM-Engine/third-party/install/
+
+# CMake cache files (safety)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake.user
+
 # ===============================
 # Visual Studio
 # ===============================
