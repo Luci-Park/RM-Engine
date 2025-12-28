@@ -8,3 +8,11 @@ Log formatting examples:
 things to think about in glfw :
 	- later be controlled with git submodule
 	- automatic .dll copy and paste.
+
+
+- OpenGL
+	- Context : GL rendering environment - must be on current thread
+	- Object : any GPU resource - GLuint = name
+	- Target : the location of object in the context
+
+- Where should Vsync go? windows or swapchain, feels like swap chains tho

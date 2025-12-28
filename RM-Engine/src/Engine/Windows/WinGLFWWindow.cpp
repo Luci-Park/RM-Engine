@@ -37,10 +37,13 @@ namespace rm
 		SetWindowDesc(config.Window);
 		SetRenderConfig(config.Render);
 
-		window = glfwCreateWindow(windowData.Width, windowData.Height, windowData.Title.c_str()
+		GLFWwindow* window = glfwCreateWindow(windowData.width, windowData.height, windowData.Title.c_str()
 		                          , nullptr, nullptr);
 
 		RM_ASSERT(window);
+
+		windowHandle.type = WindowType::GLFW;
+		windowHandle.window = window;
 
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
@@ -57,8 +60,8 @@ namespace rm
 		glfwSetWindowSizeCallback(window, [](GLFWwindow* w, int width, int height)
 			{
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
-				data.Width = width;
-				data.Height = height;
+				data.width = width;
+				data.height = height;
 
 				WindowResizeEvent e(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
 				if (data.EventCallback) data.EventCallback(e);
@@ -148,16 +151,16 @@ namespace rm
 				if (data.EventCallback) data.EventCallback(e);
 			});
 
-		SetVsync(windowData.VSync);
+		SetVsync(windowData.vSync);
 		
 	}
 
 	void WinGLFWwindow::SetWindowDesc(const WindowDesc& desc)
 	{
 		windowData.Title = desc.Title;
-		windowData.Width = static_cast<int>(desc.Width);
-		windowData.Height = static_cast<int>(desc.Height);
-		windowData.VSync = desc.VSync;
+		windowData.width = static_cast<int>(desc.Width);
+		windowData.height = static_cast<int>(desc.Height);
+		windowData.vSync = desc.VSync;
 
 		glfwWindowHint(GLFW_RESIZABLE, desc.Resizable ? GLFW_TRUE : GLFW_FALSE);
 	}
@@ -165,13 +168,13 @@ namespace rm
 	void WinGLFWwindow::SetRenderConfig(const RenderConfig& render)
 	{
 		int api;
-		switch (render.Api)
+		switch (render.api)
 		{
-		case GraphicsAPI::OpenGL: api = GLFW_OPENGL_API; break;
+			case GraphicsAPI::OpenGL: api = GLFW_OPENGL_API; break;
 		}
 		glfwWindowHint(GLFW_CLIENT_API, api);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, render.GLMajor);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, render.GLMinor);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, render.apiMajor);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, render.apiMinor);
 	}
 
 	void WinGLFWwindow::SetVsync(bool enable)
@@ -181,7 +184,7 @@ namespace rm
 		else
 			glfwSwapInterval(0);
 
-		windowData.VSync = enable;
+		windowData.vSync = enable;
 	}
 
 	void WinGLFWwindow::PollEvents()
@@ -191,8 +194,8 @@ namespace rm
 
 	void WinGLFWwindow::Shutdown()
 	{
-		glfwDestroyWindow(window);
-		window = nullptr;
+		glfwDestroyWindow(static_cast<GLFWwindow*>(windowHandle.window));
+		windowHandle.window = nullptr;
 		glfwTerminate();
 	}
 

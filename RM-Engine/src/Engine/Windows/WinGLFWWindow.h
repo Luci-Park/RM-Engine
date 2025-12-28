@@ -21,9 +21,9 @@ namespace rm
 		WinGLFWwindow(const EngineConfig& config);
 		~WinGLFWwindow() override;
 
-		uint32_t GetWidth() const override { return windowData.Width; }
-		uint32_t GetHeight() const override { return windowData.Height; }
-		bool GetVsync() const override { return windowData.VSync; }
+		uint32_t GetWidth() const override { return windowData.width; }
+		uint32_t GetHeight() const override { return windowData.height; }
+		bool GetVsync() const override { return windowData.vSync; }
 		
 		void SetVsync(bool enable) override;
 
@@ -34,7 +34,7 @@ namespace rm
 			windowData.EventCallback = callback;
 		}
 
-		void* NativeWindow() const override { return window; }
+		WindowHandle GetNativeWindow() const override { return windowHandle; }
 
 	private:
 		void Init(const EngineConfig& config);
@@ -46,15 +46,15 @@ namespace rm
 		struct WindowData
 		{
 			std::string Title;
-			int Width = 0;
-			int Height = 0;
-			bool VSync = true;
+			int width = 0;
+			int height = 0;
+			bool vSync = true;
 
 			EventCallbackFn EventCallback;
 		};
 
-		WindowData windowData;
-		GLFWwindow* window = nullptr;
+		WindowData windowData = {};
+		WindowHandle windowHandle = {};
 	};
 
 } // rm namespace

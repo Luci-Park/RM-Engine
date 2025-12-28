@@ -21,4 +21,15 @@ namespace rm
 		bool Resizable = true;
 		bool VSync = true;
 	};
+
+	enum class WindowType
+	{
+		GLFW,
+	};
+
+	struct WindowHandle
+	{
+		WindowType type = WindowType::GLFW;
+		void* window = nullptr;
+	};
 } // rm namespace

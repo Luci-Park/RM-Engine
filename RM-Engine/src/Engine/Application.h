@@ -9,16 +9,18 @@
  *
  */
 #pragma once
-#include "Engine/Windows/Window.h"
 #include <memory>
 
 namespace rm
 {
+	class Window;
+	class Event;
+	class Renderer;
 	class Application
 	{
 	public:
-		Application() = default;
-		virtual ~Application() = default;
+		Application();
+		virtual ~Application();
 		void Init();
 		void Run();
 		void Shutdown();
@@ -29,7 +31,9 @@ namespace rm
 		bool OnWindowClose(class WindowCloseEvent& e);
 		bool OnWindowResize(class WindowResizeEvent& e);
 
-		std::unique_ptr<Window> window;
+	private:
+		std::unique_ptr<Window> window = nullptr;
+		std::unique_ptr<Renderer> renderer = nullptr;
 		bool isRunning = false;
 	};
 	

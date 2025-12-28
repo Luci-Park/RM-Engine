@@ -32,7 +32,7 @@ namespace rm
 
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 
-		virtual void* NativeWindow() const = 0;
+		virtual WindowHandle GetNativeWindow() const = 0;
 
 		static std::unique_ptr<Window> Create(const EngineConfig& config = {});
 

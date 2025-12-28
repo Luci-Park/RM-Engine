@@ -19,9 +19,9 @@ namespace rm
 	};
 
     struct RenderConfig {
-        GraphicsAPI Api = GraphicsAPI::OpenGL;
-        int GLMajor = 4;
-        int GLMinor = 6;
+        GraphicsAPI api = GraphicsAPI::OpenGL;
+        int apiMajor = 4;
+        int apiMinor = 6;
     };
 
 } // rm namespace

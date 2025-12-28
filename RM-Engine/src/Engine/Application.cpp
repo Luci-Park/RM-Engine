@@ -13,6 +13,7 @@
 #include "Application.h"
 
 #include "Windows/WinGLFWWindow.h"
+#include "Rendering/Renderer.h"
 
 #include "Engine/Events/WindowEvent.h"
 #include "Engine/Events/Event.h"
@@ -22,10 +23,24 @@
 
 namespace rm
 {
+	Application::Application()
+	{
+	}
+
+	Application::~Application()
+	{
+	}
+
 	void Application::Init()
 	{
-		window = Window::Create();
+		RenderConfig renderConfig = {GraphicsAPI::OpenGL, 4, 6};
+		WindowDesc windowDesc = {};
+		EngineConfig config = { windowDesc, renderConfig };
+		
+		window = Window::Create(config);
 		window->SetEventCallback([this](Event& e) { OnEvent(e); });
+
+		renderer = std::make_unique<Renderer>(renderConfig, window->GetNativeWindow());
 
 		Input::Init();
 
@@ -40,20 +55,7 @@ namespace rm
 			Input::BeginFrame();
 			window->PollEvents();
 
-			if (Input::IsKeyPressed(Key::Space))
-			{
-				LOG_INFO("SPACE PRESSED");
-			}
-
-			if (Input::IsKeyDown(Key::Space))
-			{
-				LOG_INFO("SPACE HELD");
-			}
-
-			if (Input::IsKeyReleased(Key::Space))
-			{
-				LOG_INFO("SPACE RELEASED");
-			}
+			renderer->Render();
 		}
 	}
 
@@ -88,8 +90,9 @@ namespace rm
 
 	bool Application::OnWindowResize(class WindowResizeEvent& e)
 	{
-		// TODO: Notify the render swapchain, etc.
 		LOG_INFO("Resize -> {}x{}", e.GetWidth(), e.GetHeight());
+
+		renderer->OnResize(e.GetWidth(), e.GetHeight());
 		return false; // Allow others to react as well
 	}
 }
