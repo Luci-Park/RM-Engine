@@ -2,8 +2,6 @@
  * @file InputEvent.h
  * @author rahul
  * @brief // Engine-defined input events for keyboard and mouse interactions.
- * @version 0.1
- * @date 12/22/2025 7:55:38 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -33,7 +31,8 @@ namespace rm
 	{
 	public:
 		KeyPressedEvent(Key key, int repeatCount)
-			: KeyEvent(key), m_RepeatCount(repeatCount) {
+			: KeyEvent(key), m_RepeatCount(repeatCount)
+		{
 		}
 
 		int GetRepeatCount() const { return m_RepeatCount; }
@@ -55,7 +54,8 @@ namespace rm
 	{
 	public:
 		explicit KeyReleasedEvent(Key key)
-			: KeyEvent(key) {
+			: KeyEvent(key)
+		{
 		}
 
 		std::string ToString() const override

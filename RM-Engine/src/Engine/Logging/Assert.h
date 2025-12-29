@@ -2,8 +2,6 @@
  * @file Assert.h
  * @author sumin.park
  * @brief The RM_ASSERT macro definition file.
- * @version 0.1
- * @date 12/16/2025 8:54:04 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -20,15 +18,17 @@
 #define RM_DEBUGBREAK() std::abort()
 #endif
 
- // Debug-only assert: breaks when condition is false.
- // In Release, it compiles out completely.
+// Debug-only assert: breaks when condition is false.
+// In Release, it compiles out completely.
 #ifndef NDEBUG
 #define RM_ASSERT(expr) \
-    do { \
-      if(!(expr)) { \
-        RM_DEBUGBREAK(); \
-      } \
-    } while(0)
+  do                    \
+  {                     \
+    if (!(expr))        \
+    {                   \
+      RM_DEBUGBREAK();  \
+    }                   \
+  } while (0)
 #else
 #define RM_ASSERT(expr) ((void)0)
 #endif

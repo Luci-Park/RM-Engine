@@ -2,8 +2,6 @@
  * @file Window.h
  * @author sumin.park
  * @brief The interface representing the window.
- * @version 0.1
- * @date 12/18/2025 11:37:10 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -37,11 +35,11 @@ namespace rm
 
 		virtual void Update() = 0;
 
-		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
+		virtual void SetEventCallback(const EventCallbackFn &callback) = 0;
 
-		virtual void* NativeWindow() const = 0;
+		virtual void *NativeWindow() const = 0;
 
-		static std::unique_ptr<Window> Create(const WindowProps& props = {});
+		static std::unique_ptr<Window> Create(const WindowProps &props = {});
 
 	protected:
 		Window() = default;
