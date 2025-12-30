@@ -2,8 +2,6 @@
  * @file WinGLFWWindow.h
  * @author sumin.park
  * @brief  Window class for the Windows OS
- * @version 0.1
- * @date 12/18/2025 12:19:10 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -18,26 +16,26 @@ namespace rm
 	class WinGLFWwindow final : public Window
 	{
 	public:
-		WinGLFWwindow(const WindowProps& props);
+		WinGLFWwindow(const WindowProps &props);
 		~WinGLFWwindow() override;
 
 		uint32_t GetWidth() const override { return windowData.Width; }
 		uint32_t GetHeight() const override { return windowData.Height; }
 		bool GetVsync() const override { return windowData.VSync; }
-		
+
 		void SetVsync(bool enable) override;
 
 		void Update() override;
 
-		void SetEventCallback(const EventCallbackFn& callback) override
+		void SetEventCallback(const EventCallbackFn &callback) override
 		{
 			windowData.EventCallback = callback;
 		}
 
-		void* NativeWindow() const override { return window; }
+		void *NativeWindow() const override { return window; }
 
 	private:
-		void Init(const WindowProps& props);
+		void Init(const WindowProps &props);
 		void Shutdown();
 
 		struct WindowData
@@ -51,7 +49,7 @@ namespace rm
 		};
 
 		WindowData windowData;
-		GLFWwindow* window = nullptr;
+		GLFWwindow *window = nullptr;
 	};
 
 } // rm namespace

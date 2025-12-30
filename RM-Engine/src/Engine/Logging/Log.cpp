@@ -2,9 +2,6 @@
  * @file Log.cpp
  * @author sumin.park
  * @brief The static class that manages logging.
- * 
- * @version 0.1
- * @date 12/16/2025 3:47:59 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -30,16 +27,22 @@ namespace rm
 	{
 		switch (level)
 		{
-		case LogLevel::Trace:    return spdlog::level::trace;
-		case LogLevel::Debug:    return spdlog::level::debug;
-		case LogLevel::Info:     return spdlog::level::info;
-		case LogLevel::Warn:     return spdlog::level::warn;
-		case LogLevel::Error:    return spdlog::level::err;
-		case LogLevel::Critical: return spdlog::level::critical;
-		}		
+		case LogLevel::Trace:
+			return spdlog::level::trace;
+		case LogLevel::Debug:
+			return spdlog::level::debug;
+		case LogLevel::Info:
+			return spdlog::level::info;
+		case LogLevel::Warn:
+			return spdlog::level::warn;
+		case LogLevel::Error:
+			return spdlog::level::err;
+		case LogLevel::Critical:
+			return spdlog::level::critical;
+		}
 	}
 
-	static spdlog::logger* Get(LoggerId id)
+	static spdlog::logger *Get(LoggerId id)
 	{
 		return loggers[static_cast<size_t>(id)].get();
 	}
@@ -52,8 +55,7 @@ namespace rm
 		console->set_pattern(LOG_PATTERN);
 		spdlog::flush_on(spdlog::level::err);
 
-
-		std::vector<spdlog::sink_ptr> sinks{ console, file };
+		std::vector<spdlog::sink_ptr> sinks{console, file};
 
 		loggers[static_cast<size_t>(LoggerId::Engine)] =
 			std::make_shared<spdlog::logger>("ENGINE", sinks.begin(), sinks.end());
@@ -69,7 +71,7 @@ namespace rm
 
 	void Log::Submit(LoggerId logger, LogLevel level, std::string_view message, std::source_location where)
 	{
-		auto* targetLogger = Get(logger);
+		auto *targetLogger = Get(logger);
 		assert(targetLogger);
 		targetLogger->log(ToSpdLvl(level), "{}", message);
 	}

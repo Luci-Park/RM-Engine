@@ -2,8 +2,6 @@
  * @file InputCodes.h
  * @author rahul
  * @brief // Engine-defined, platform-agnostic key and mouse codes used by the input system.
- * @version 0.1
- * @date 12/22/2025 7:05:02 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -18,11 +16,44 @@ namespace rm
 		Unknown = 0,
 
 		// Letters
-		A, B, C, D, E, F, G, H, I, J, K, L, M,
-		N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+		A,
+		B,
+		C,
+		D,
+		E,
+		F,
+		G,
+		H,
+		I,
+		J,
+		K,
+		L,
+		M,
+		N,
+		O,
+		P,
+		Q,
+		R,
+		S,
+		T,
+		U,
+		V,
+		W,
+		X,
+		Y,
+		Z,
 
 		// Numbers
-		D0, D1, D2, D3, D4, D5, D6, D7, D8, D9,
+		D0,
+		D1,
+		D2,
+		D3,
+		D4,
+		D5,
+		D6,
+		D7,
+		D8,
+		D9,
 
 		// Controls
 		Space,
@@ -32,12 +63,18 @@ namespace rm
 		Backspace,
 
 		// Arrows
-		Left, Right, Up, Down,
+		Left,
+		Right,
+		Up,
+		Down,
 
 		// Modifiers
-		LeftShift, RightShift,
-		LeftCtrl, RightCtrl,
-		LeftAlt, RightAlt,
+		LeftShift,
+		RightShift,
+		LeftCtrl,
+		RightCtrl,
+		LeftAlt,
+		RightAlt,
 	};
 
 	enum class MouseButton : uint8_t
