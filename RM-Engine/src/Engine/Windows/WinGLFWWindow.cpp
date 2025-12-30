@@ -10,6 +10,7 @@
 #include "pch.h"
 #include "WinGLFWwindow.h"
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "GLFWInputMapper.h"
@@ -46,6 +47,13 @@ namespace rm
 
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
+
+		// ---- GLAD init (required) ----
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			RM_ASSERT(false && "Failed to initialize GLAD");
+			return;
+		}
 
 		// ----- Window events -----
 
@@ -156,9 +164,6 @@ namespace rm
 
 	void WinGLFWwindow::Update()
 	{
-		glClearColor(1, 0, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
