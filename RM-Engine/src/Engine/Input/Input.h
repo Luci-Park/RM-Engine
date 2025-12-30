@@ -2,8 +2,6 @@
  * @file Input.h
  * @author rahul
  * @brief // Centralized, platform-independent input service providing frame-based input queries.
- * @version 0.1
- * @date 12/22/2025 7:03:47 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -17,9 +15,9 @@
 
 namespace rm
 {
-	class Input
-	{
-	public:
+    class Input
+    {
+    public:
         // Call once on engine start (no platform knowledge)
         static void Init();
         static void Shutdown();
@@ -48,7 +46,7 @@ namespace rm
         static void OnMouseButton(MouseButton button, bool down);
         static void OnMouseMove(float x, float y);
         static void OnScroll(float yOffset);
-        static void OnEvent(Event& event);
+        static void OnEvent(Event &event);
 
         static void ClearAll();
 
@@ -73,9 +71,9 @@ namespace rm
             bool initialized = false;
         };
 
-        static State& GetState();
+        static State &GetState();
         static int KeyIndex(Key key);
         static int MouseIndex(MouseButton button);
-	};
+    };
 
 } // rm namespace

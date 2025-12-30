@@ -2,8 +2,6 @@
  * @file Application.cpp
  * @author sumin.park
  * @brief The application class that the app will inherit.
- * @version 0.1
- * @date 12/16/2025 3:47:59 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -19,13 +17,13 @@
 
 #include "Input/Input.h"
 
-
 namespace rm
 {
 	void Application::Init()
 	{
 		window = Window::Create();
-		window->SetEventCallback([this](Event& e) { OnEvent(e); });
+		window->SetEventCallback([this](Event &e)
+								 { OnEvent(e); });
 
 		Input::Init();
 
@@ -65,28 +63,24 @@ namespace rm
 		window.reset();
 	}
 
-	void Application::OnEvent(Event& e)
+	void Application::OnEvent(Event &e)
 	{
 		Input::OnEvent(e);
 		EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& ev)
-			{
-				return OnWindowClose(ev);
-			});
-		dispatcher.Dispatch<WindowResizeEvent>([this](WindowResizeEvent& ev)
-			{
-				return OnWindowResize(ev);
-			});
+		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent &ev)
+											  { return OnWindowClose(ev); });
+		dispatcher.Dispatch<WindowResizeEvent>([this](WindowResizeEvent &ev)
+											   { return OnWindowResize(ev); });
 	}
 
-	bool Application::OnWindowClose(class WindowCloseEvent& e)
+	bool Application::OnWindowClose(class WindowCloseEvent &e)
 	{
 		isRunning = false;
 		return true;
 	}
 
-	bool Application::OnWindowResize(class WindowResizeEvent& e)
+	bool Application::OnWindowResize(class WindowResizeEvent &e)
 	{
 		// TODO: Notify the render swapchain, etc.
 		LOG_INFO("Resize -> {}x{}", e.GetWidth(), e.GetHeight());
