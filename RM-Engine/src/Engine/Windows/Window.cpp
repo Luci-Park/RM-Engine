@@ -2,8 +2,6 @@
  * @file Window.cpp
  * @author sumin.park
  * @brief The interface representing the window.
- * @version 0.1
- * @date 12/18/2025 12:19:58 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *

@@ -2,8 +2,6 @@
  * @file WinGLFWWindow.h
  * @author sumin.park
  * @brief  Window class for the Windows OS
- * @version 0.1
- * @date 12/18/2025 12:19:10 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -29,7 +27,7 @@ namespace rm
 
 		void PollEvents() override;
 
-		void SetEventCallback(const EventCallbackFn& callback) override
+		void SetEventCallback(const EventCallbackFn &callback) override
 		{
 			windowData.EventCallback = callback;
 		}
@@ -53,8 +51,8 @@ namespace rm
 			EventCallbackFn EventCallback;
 		};
 
-		WindowData windowData = {};
-		WindowHandle windowHandle = {};
+		WindowData windowData;
+		GLFWwindow* window = nullptr;
 	};
 
 } // rm namespace

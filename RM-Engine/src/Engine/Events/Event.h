@@ -2,8 +2,6 @@
  * @file Event.h
  * @author rahul
  * @brief // Core event base types and dispatcher for engine-wide event handling.
- * @version 0.1
- * @date 12/22/2025 7:47:43 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -47,14 +45,13 @@ namespace rm
         EventCategoryWindow = 1 << 5
     };
 
-#define RM_EVENT_CLASS_TYPE(type) \
-    static EventType GetStaticType() { return EventType::type; } \
+#define RM_EVENT_CLASS_TYPE(type)                                               \
+    static EventType GetStaticType() { return EventType::type; }                \
     virtual EventType GetEventType() const override { return GetStaticType(); } \
-    virtual const char* GetName() const override { return #type; }
+    virtual const char *GetName() const override { return #type; }
 
 #define RM_EVENT_CLASS_CATEGORY(categoryFlags) \
     virtual int GetCategoryFlags() const override { return categoryFlags; }
-
 
     class Event
     {
@@ -64,7 +61,7 @@ namespace rm
         bool Handled = false;
 
         virtual EventType GetEventType() const = 0;
-        virtual const char* GetName() const = 0;
+        virtual const char *GetName() const = 0;
         virtual int GetCategoryFlags() const = 0;
         virtual std::string ToString() const { return GetName(); }
 
@@ -77,23 +74,23 @@ namespace rm
     class EventDispatcher
     {
     public:
-        explicit EventDispatcher(Event& e) : m_Event(e) {}
+        explicit EventDispatcher(Event &e) : m_Event(e) {}
 
-        template<typename T, typename F>
-        bool Dispatch(const F& func)
+        template <typename T, typename F>
+        bool Dispatch(const F &func)
         {
             if (m_Event.GetEventType() == T::GetStaticType())
             {
-                m_Event.Handled |= func(static_cast<T&>(m_Event));
+                m_Event.Handled |= func(static_cast<T &>(m_Event));
                 return true;
             }
             return false;
         }
 
     private:
-        Event& m_Event;
+        Event &m_Event;
     };
 
-    using EventCallbackFn = std::function<void(Event&)>;
+    using EventCallbackFn = std::function<void(Event &)>;
 
 } // rm namespace

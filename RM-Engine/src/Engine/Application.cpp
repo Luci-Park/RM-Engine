@@ -2,21 +2,19 @@
  * @file Application.cpp
  * @author sumin.park
  * @brief The application class that the app will inherit.
- * @version 0.1
- * @date 12/16/2025 3:47:59 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
  */
 
-#include "pch.h"
 #include "Application.h"
+#include "pch.h"
 
 #include "Windows/WinGLFWWindow.h"
 #include "Rendering/Renderer.h"
 
-#include "Engine/Events/WindowEvent.h"
 #include "Engine/Events/Event.h"
+#include "Engine/Events/WindowEvent.h"
 
 #include "Input/Input.h"
 
@@ -42,10 +40,10 @@ namespace rm
 
 		renderer = std::make_unique<Renderer>(renderConfig, window->GetNativeWindow());
 
-		Input::Init();
+        Input::Init();
 
-		isRunning = true;
-	}
+        isRunning = true;
+    }
 
 	void Application::Run()
 	{
@@ -55,44 +53,51 @@ namespace rm
 			Input::BeginFrame();
 			window->PollEvents();
 
-			renderer->Render();
+			if (Input::IsKeyPressed(Key::Space))
+			{
+				LOG_INFO("SPACE PRESSED");
+			}
+
+			if (Input::IsKeyDown(Key::Space))
+			{
+				LOG_INFO("SPACE HELD");
+			}
+
+			if (Input::IsKeyReleased(Key::Space))
+			{
+				LOG_INFO("SPACE RELEASED");
+			}
 		}
 	}
 
-	void Application::Shutdown()
-	{
-		isRunning = false;
+    void Application::Shutdown() {
+        isRunning = false;
 
-		Input::Shutdown();
-		window.reset();
-	}
+        DestroyTriangleTest();
 
-	void Application::OnEvent(Event& e)
-	{
-		Input::OnEvent(e);
-		EventDispatcher dispatcher(e);
+        Input::Shutdown();
+        window.reset();
+    }
 
-		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& ev)
-			{
-				return OnWindowClose(ev);
-			});
-		dispatcher.Dispatch<WindowResizeEvent>([this](WindowResizeEvent& ev)
-			{
-				return OnWindowResize(ev);
-			});
-	}
+    void Application::OnEvent(Event& e) {
+        Input::OnEvent(e);
+        EventDispatcher dispatcher(e);
 
-	bool Application::OnWindowClose(class WindowCloseEvent& e)
-	{
-		isRunning = false;
-		return true;
-	}
+        dispatcher.Dispatch<WindowCloseEvent>(
+            [this](WindowCloseEvent& ev) { return OnWindowClose(ev); });
+        dispatcher.Dispatch<WindowResizeEvent>(
+            [this](WindowResizeEvent& ev) { return OnWindowResize(ev); });
+    }
+
+    bool Application::OnWindowClose(class WindowCloseEvent& e) {
+        isRunning = false;
+        return true;
+    }
 
 	bool Application::OnWindowResize(class WindowResizeEvent& e)
 	{
+		// TODO: Notify the render swapchain, etc.
 		LOG_INFO("Resize -> {}x{}", e.GetWidth(), e.GetHeight());
-
-		renderer->OnResize(e.GetWidth(), e.GetHeight());
 		return false; // Allow others to react as well
 	}
 }

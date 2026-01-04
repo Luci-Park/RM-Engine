@@ -2,8 +2,6 @@
  * @file Window.h
  * @author sumin.park
  * @brief The interface representing the window.
- * @version 0.1
- * @date 12/18/2025 11:37:10 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -30,7 +28,7 @@ namespace rm
 
 		virtual void PollEvents() = 0;
 
-		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
+		virtual void SetEventCallback(const EventCallbackFn &callback) = 0;
 
 		virtual WindowHandle GetNativeWindow() const = 0;
 

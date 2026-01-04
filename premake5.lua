@@ -67,7 +67,10 @@ project (engineName)
     files
     {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        
+        -- Custom compilation for glad.c file (better design can be added later)
+        "%{prj.name}/third-party/source/glad/src/glad.c",
     }
 
     includedirs
@@ -83,6 +86,11 @@ project (engineName)
         -- Prebuilt deps (example: GLFW)
         IncludeDir["glfw"],
     }
+
+    filter "files:RM-Engine/third-party/source/glad/src/glad.c"
+        language "C"
+        flags { "NoPCH" }
+    filter {}
 
     -- If you want engine itself to link to some libs, do it here.
 

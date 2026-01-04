@@ -2,8 +2,6 @@
  * @file WinGLFWWindow.cpp
  * @author sumin.park
  * @brief  Window class for the Windows OS
- * @version 0.1
- * @date 12/18/2025 12:19:10 PM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -12,6 +10,7 @@
 #include "pch.h"
 #include "WinGLFWwindow.h"
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "GLFWInputMapper.h"
@@ -48,27 +47,32 @@ namespace rm
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, &windowData);
 
+		// ---- GLAD init (required) ----
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			RM_ASSERT(false && "Failed to initialize GLAD");
+			return;
+		}
+
 		// ----- Window events -----
 
-		glfwSetWindowCloseCallback(window, [](GLFWwindow* w)
-			{
+		glfwSetWindowCloseCallback(window, [](GLFWwindow *w)
+								   {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				WindowCloseEvent e;
-				if (data.EventCallback) data.EventCallback(e);
-			});
+				if (data.EventCallback) data.EventCallback(e); });
 
-		glfwSetWindowSizeCallback(window, [](GLFWwindow* w, int width, int height)
-			{
+		glfwSetWindowSizeCallback(window, [](GLFWwindow *w, int width, int height)
+								  {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				data.width = width;
 				data.height = height;
 
 				WindowResizeEvent e(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
-				if (data.EventCallback) data.EventCallback(e);
-			});
+				if (data.EventCallback) data.EventCallback(e); });
 
-		glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int focused)
-			{
+		glfwSetWindowFocusCallback(window, [](GLFWwindow *w, int focused)
+								   {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				if (!data.EventCallback) return;
 
@@ -81,15 +85,12 @@ namespace rm
 				{
 					rm::WindowLostFocusEvent e;
 					data.EventCallback(e);
-				}
-			});
-
-
+				} });
 
 		// ----- Input events + polling state -----
 
-		glfwSetKeyCallback(window, [](GLFWwindow* w, int key, int /*scancode*/, int action, int /*mods*/)
-			{
+		glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int /*scancode*/, int action, int /*mods*/)
+						   {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				Key k = GLFWInputMapper::ToKey(key);
 
@@ -109,11 +110,10 @@ namespace rm
 				{
 					KeyPressedEvent e(k, 1);
 					if (data.EventCallback) data.EventCallback(e);
-				}
-			});
+				} });
 
-		glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int button, int action, int /*mods*/)
-			{
+		glfwSetMouseButtonCallback(window, [](GLFWwindow *w, int button, int action, int /*mods*/)
+								   {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				MouseButton b = GLFWInputMapper::ToMouseButton(button);
 
@@ -128,28 +128,25 @@ namespace rm
 				{
 					MouseButtonReleasedEvent e(b);
 					if (data.EventCallback) data.EventCallback(e);
-				}
-			});
+				} });
 
-		glfwSetCursorPosCallback(window, [](GLFWwindow* w, double xPos, double yPos)
-			{
+		glfwSetCursorPosCallback(window, [](GLFWwindow *w, double xPos, double yPos)
+								 {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				float x = static_cast<float>(xPos);
 				float y = static_cast<float>(yPos);
 
 				MouseMovedEvent e(x, y);
-				if (data.EventCallback) data.EventCallback(e);
-			});
+				if (data.EventCallback) data.EventCallback(e); });
 
-		glfwSetScrollCallback(window, [](GLFWwindow* w, double xOffset, double yOffset)
-			{
+		glfwSetScrollCallback(window, [](GLFWwindow *w, double xOffset, double yOffset)
+							  {
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(w));
 				float xo = static_cast<float>(xOffset);
 				float yo = static_cast<float>(yOffset);
 
 				MouseScrolledEvent e(xo, yo);
-				if (data.EventCallback) data.EventCallback(e);
-			});
+				if (data.EventCallback) data.EventCallback(e); });
 
 		SetVsync(windowData.vSync);
 		
@@ -198,6 +195,5 @@ namespace rm
 		windowHandle.window = nullptr;
 		glfwTerminate();
 	}
-
 
 } // rm namespace

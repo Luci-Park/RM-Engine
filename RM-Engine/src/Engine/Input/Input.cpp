@@ -2,8 +2,6 @@
  * @file Input.cpp
  * @author rahul
  * @brief // Centralized, platform-independent input service providing frame-based input queries.
- * @version 0.1
- * @date 12/22/2025 7:03:47 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -18,7 +16,7 @@
 
 namespace rm
 {
-    Input::State& Input::GetState()
+    Input::State &Input::GetState()
     {
         static State s{};
         return s;
@@ -27,20 +25,22 @@ namespace rm
     int Input::KeyIndex(Key key)
     {
         auto v = static_cast<int>(key);
-        if (v <= 0 || v >= State::MaxKeys) return -1;
+        if (v <= 0 || v >= State::MaxKeys)
+            return -1;
         return v;
     }
 
     int Input::MouseIndex(MouseButton button)
     {
         int v = (button == MouseButton::Unknown) ? -1 : static_cast<int>(button);
-        if (v < 0 || v >= State::MaxMouseButtons) return -1;
+        if (v < 0 || v >= State::MaxMouseButtons)
+            return -1;
         return v;
     }
 
     void Input::Init()
     {
-        auto& s = GetState();
+        auto &s = GetState();
         s = State{};
         s.initialized = true;
         LOG_INFO("Input initialized.");
@@ -48,14 +48,14 @@ namespace rm
 
     void Input::Shutdown()
     {
-        auto& s = GetState();
+        auto &s = GetState();
         s = State{};
         LOG_INFO("Input shutdown.");
     }
 
     void Input::BeginFrame()
     {
-        auto& s = GetState();
+        auto &s = GetState();
         RM_ASSERT(s.initialized && "Input::Init must be called before BeginFrame.");
 
         std::memcpy(s.prevKeys, s.keys, sizeof(s.keys));
@@ -67,42 +67,42 @@ namespace rm
 
     bool Input::IsKeyDown(Key key)
     {
-        const auto& s = GetState();
+        const auto &s = GetState();
         int i = KeyIndex(key);
         return i >= 0 && s.keys[i];
     }
 
     bool Input::IsKeyPressed(Key key)
     {
-        const auto& s = GetState();
+        const auto &s = GetState();
         int i = KeyIndex(key);
         return i >= 0 && s.keys[i] && !s.prevKeys[i];
     }
 
     bool Input::IsKeyReleased(Key key)
     {
-        const auto& s = GetState();
+        const auto &s = GetState();
         int i = KeyIndex(key);
         return i >= 0 && !s.keys[i] && s.prevKeys[i];
     }
 
     bool Input::IsMouseDown(MouseButton button)
     {
-        const auto& s = GetState();
+        const auto &s = GetState();
         int i = MouseIndex(button);
         return i >= 0 && s.mouse[i];
     }
 
     bool Input::IsMousePressed(MouseButton button)
     {
-        const auto& s = GetState();
+        const auto &s = GetState();
         int i = MouseIndex(button);
         return i >= 0 && s.mouse[i] && !s.prevMouse[i];
     }
 
     bool Input::IsMouseReleased(MouseButton button)
     {
-        const auto& s = GetState();
+        const auto &s = GetState();
         int i = MouseIndex(button);
         return i >= 0 && !s.mouse[i] && s.prevMouse[i];
     }
@@ -112,8 +112,8 @@ namespace rm
 
     std::pair<float, float> Input::GetMousePosition()
     {
-        const auto& s = GetState();
-        return { s.mouseX, s.mouseY };
+        const auto &s = GetState();
+        return {s.mouseX, s.mouseY};
     }
 
     float Input::GetScrollDeltaY() { return GetState().scrollDeltaY; }
@@ -122,36 +122,38 @@ namespace rm
 
     void Input::OnKey(Key key, bool down)
     {
-        auto& s = GetState();
+        auto &s = GetState();
         int i = KeyIndex(key);
-        if (i < 0) return;
+        if (i < 0)
+            return;
         s.keys[i] = down;
     }
 
     void Input::OnMouseButton(MouseButton button, bool down)
     {
-        auto& s = GetState();
+        auto &s = GetState();
         int i = MouseIndex(button);
-        if (i < 0) return;
+        if (i < 0)
+            return;
         s.mouse[i] = down;
     }
 
     void Input::OnMouseMove(float x, float y)
     {
-        auto& s = GetState();
+        auto &s = GetState();
         s.mouseX = x;
         s.mouseY = y;
     }
 
     void Input::OnScroll(float yOffset)
     {
-        auto& s = GetState();
+        auto &s = GetState();
         s.scrollDeltaY += yOffset;
     }
 
     void Input::ClearAll()
     {
-        auto& s = GetState();
+        auto &s = GetState();
         std::memset(s.keys, 0, sizeof(s.keys));
         std::memset(s.prevKeys, 0, sizeof(s.prevKeys));
         std::memset(s.mouse, 0, sizeof(s.mouse));
@@ -159,54 +161,47 @@ namespace rm
         s.scrollDeltaY = 0.0f;
     }
 
-    void Input::OnEvent(Event& e)
+    void Input::OnEvent(Event &e)
     {
-        auto& s = GetState();
+        auto &s = GetState();
         RM_ASSERT(s.initialized && "Input::Init must be called before Input::OnEvent.");
 
         EventDispatcher d(e);
 
-        d.Dispatch<KeyPressedEvent>([](KeyPressedEvent& ev)
-            {
+        d.Dispatch<KeyPressedEvent>([](KeyPressedEvent &ev)
+                                    {
                 OnKey(ev.GetKeyCode(), true);
-                return false;
-            });
+                return false; });
 
-        d.Dispatch<KeyReleasedEvent>([](KeyReleasedEvent& ev)
-            {
+        d.Dispatch<KeyReleasedEvent>([](KeyReleasedEvent &ev)
+                                     {
                 OnKey(ev.GetKeyCode(), false);
-                return false;
-            });
+                return false; });
 
-        d.Dispatch<MouseButtonPressedEvent>([](MouseButtonPressedEvent& ev)
-            {
+        d.Dispatch<MouseButtonPressedEvent>([](MouseButtonPressedEvent &ev)
+                                            {
                 OnMouseButton(ev.GetMouseButton(), true);
-                return false;
-            });
+                return false; });
 
-        d.Dispatch<MouseButtonReleasedEvent>([](MouseButtonReleasedEvent& ev)
-            {
+        d.Dispatch<MouseButtonReleasedEvent>([](MouseButtonReleasedEvent &ev)
+                                             {
                 OnMouseButton(ev.GetMouseButton(), false);
-                return false;
-            });
+                return false; });
 
-        d.Dispatch<MouseMovedEvent>([](MouseMovedEvent& ev)
-            {
+        d.Dispatch<MouseMovedEvent>([](MouseMovedEvent &ev)
+                                    {
                 OnMouseMove(ev.GetX(), ev.GetY());
-                return false;
-            });
+                return false; });
 
-        d.Dispatch<MouseScrolledEvent>([](MouseScrolledEvent& ev)
-            {
+        d.Dispatch<MouseScrolledEvent>([](MouseScrolledEvent &ev)
+                                       {
                 OnScroll(ev.GetYOffset());
-                return false;
-            });
+                return false; });
 
-        d.Dispatch<WindowLostFocusEvent>([](WindowLostFocusEvent&)
-            {
+        d.Dispatch<WindowLostFocusEvent>([](WindowLostFocusEvent &)
+                                         {
                 ClearAll();
-                return false;
-            });
+                return false; });
     }
 
 } // rm namespace

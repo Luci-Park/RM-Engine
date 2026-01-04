@@ -2,8 +2,6 @@
  * @file WindowEvent.h
  * @author rahul
  * @brief // Engine window events such as resize and close notifications.
- * @version 0.1
- * @date 12/22/2025 7:54:42 AM
  *
  * @copyright Copyright (c) 2025 - RM Engine
  *
@@ -20,7 +18,8 @@ namespace rm
 	{
 	public:
 		WindowResizeEvent(uint32_t width, uint32_t height)
-			: m_Width(width), m_Height(height) {
+			: m_Width(width), m_Height(height)
+		{
 		}
 
 		uint32_t GetWidth() const { return m_Width; }
