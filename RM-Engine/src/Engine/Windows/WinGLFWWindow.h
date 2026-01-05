@@ -51,8 +51,8 @@ namespace rm
 			EventCallbackFn EventCallback;
 		};
 
-		WindowData windowData;
-		GLFWwindow* window = nullptr;
+		WindowData windowData = {};
+		WindowHandle windowHandle = {};
 	};
 
 } // rm namespace

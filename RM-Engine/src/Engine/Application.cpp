@@ -7,9 +7,8 @@
  *
  */
 
-#include "Application.h"
 #include "pch.h"
-
+#include "Application.h"
 #include "Windows/WinGLFWWindow.h"
 #include "Rendering/Renderer.h"
 
@@ -53,27 +52,12 @@ namespace rm
 			Input::BeginFrame();
 			window->PollEvents();
 
-			if (Input::IsKeyPressed(Key::Space))
-			{
-				LOG_INFO("SPACE PRESSED");
-			}
-
-			if (Input::IsKeyDown(Key::Space))
-			{
-				LOG_INFO("SPACE HELD");
-			}
-
-			if (Input::IsKeyReleased(Key::Space))
-			{
-				LOG_INFO("SPACE RELEASED");
-			}
+			renderer->Render();
 		}
 	}
 
     void Application::Shutdown() {
         isRunning = false;
-
-        DestroyTriangleTest();
 
         Input::Shutdown();
         window.reset();
@@ -98,6 +82,7 @@ namespace rm
 	{
 		// TODO: Notify the render swapchain, etc.
 		LOG_INFO("Resize -> {}x{}", e.GetWidth(), e.GetHeight());
+		renderer->OnResize(e.GetWidth(), e.GetHeight());
 		return false; // Allow others to react as well
 	}
 }
