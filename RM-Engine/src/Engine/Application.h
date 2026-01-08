@@ -12,6 +12,7 @@
 
 namespace rm
 {
+    class Scene;
 	class Application
 	{
 	public:
@@ -22,7 +23,8 @@ namespace rm
 		void Shutdown();
 
 		void OnEvent(Event &e);
-
+	protected:
+        virtual Scene* GetInitialScene() = 0;
 	private:
 		bool OnWindowClose(class WindowCloseEvent &e);
 		bool OnWindowResize(class WindowResizeEvent &e);
