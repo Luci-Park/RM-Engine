@@ -10,16 +10,23 @@
  */
 
 #pragma once
+#include <glad/glad.h>
+
 #include "Engine/Math/Vec3.h"
+#include "Engine/Math/Vec2.h"
 namespace rm
 {
 	struct Vertex {
-	    
+        math::Vec3 pos;
+        math::Vec2 uv;
 	};
-	class Mesh
-	{
+
+	class Mesh {
 	public:
-	private:
+        static Mesh* CreateTriangleMesh();
+	public:
+        GLuint vao = 0, vbo = 0, ibo = 0;
+        GLsizei indexCount = 0;
 	};
 
 } // rm namespace

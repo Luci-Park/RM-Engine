@@ -12,14 +12,14 @@
 #pragma once
 #include <glad/glad.h>
 
-namespace rm
-{
-	class Material
-	{
-	public:
+#include "Engine/Math/Vec4.h"
+
+namespace rm {
+
+    struct Material {
         GLuint program = 0;
-     GLuint texture = 0;
-	private:
-	};
+        GLuint texture0 = 0;  // one texture for now
+        math::Vec4 tint{1, 1, 1, 1};
+    };
 
 } // rm namespace

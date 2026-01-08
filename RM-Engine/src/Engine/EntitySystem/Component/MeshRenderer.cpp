@@ -43,5 +43,13 @@ namespace rm
     }
 
     void MeshRenderer::Render() {
+        if (!mesh || !material)
+            return;
+        
+        glUseProgram(material->program);
+
+        glBindVertexArray(mesh->vao);
+        glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*) 0);
+        glBindVertexArray(0);
     }
 } // rm namespace
