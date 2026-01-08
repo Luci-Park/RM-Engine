@@ -7,9 +7,8 @@
  *
  */
 
-#include "Application.h"
 #include "pch.h"
-
+#include "Application.h"
 #include "Windows/WinGLFWWindow.h"
 #include "glad/glad.h"
 
