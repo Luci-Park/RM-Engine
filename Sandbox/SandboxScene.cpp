@@ -13,5 +13,6 @@
 #include "SandboxScene.h"
 
 void SandboxScene::OnInit() {
-    CreateGameObject();
+    rm::GameObject* gameObject = CreateGameObject();
+    gameObject->AddComponent<rm::MeshRenderer>();
 }

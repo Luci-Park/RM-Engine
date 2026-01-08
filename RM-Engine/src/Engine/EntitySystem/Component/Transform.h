@@ -11,15 +11,14 @@
 
 #pragma once
 #include "Component.h"
+#include "Engine/Math/Mat3.h"
 #include "Engine/Math/Vec3.h"
+#include "Engine/Math/Mat4.h"
 namespace rm {
     class Transform : public Component {
        public:
         Transform(GameObject* owner);
-        Transform(const Transform& other) = default;
         ~Transform() override = default;
-
-        Transform& operator=(const Transform& other);
 
        public:
         void Init() override;
@@ -27,10 +26,12 @@ namespace rm {
         void LateUpdate(float dt) override;
         void Render() override;
 
+        math::Mat3 LocalMatrix() const;
+
        private:
         math::Vec3 position;
         math::Vec3 scale;
-        math::Vec3 rotation;
+        float rotation;
     };
 
 }  // namespace rm

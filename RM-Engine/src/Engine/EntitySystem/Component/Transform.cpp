@@ -18,15 +18,6 @@ namespace rm {
         position(0), scale(1), rotation(0) {
     }
 
-    Transform& Transform::operator=(const Transform& other) {
-        if (this == &other)
-            return *this;
-        position = other.position;
-        rotation = other.rotation;
-        scale = other.scale;
-        return *this;
-    }
-
     void Transform::Init() {
     }
 
@@ -37,5 +28,16 @@ namespace rm {
     }
 
     void Transform::Render() {
+    }
+
+    math::Mat3 Transform::LocalMatrix() const {
+        //todo: create Rotate, Scale, Translate functions inside Mat
+        //todo: change this to Mat4
+
+        float c = cos(rotation), s = sin(rotation);
+        math::Mat3 R(c, s, 0, -s, c, 0, 0, 0, 1);
+        math::Mat3 S(scale.x, 0, 0, 0, scale.y, 0, 0, 0, 1);
+        math::Mat3 T(1, 0, 0, 0, 1, 0, position.x, position.y, 1);
+        return T * R * S;
     }
 }  // namespace rm

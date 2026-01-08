@@ -1,7 +1,7 @@
 /**
  * @file Vec3.h
  * @author sumin.park
- * @brief  Math for vector3s
+ * @brief  Math for vector3
  * @version 0.1
  * @date 1/8/2026 6:40:49 AM
  *
