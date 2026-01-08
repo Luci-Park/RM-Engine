@@ -60,7 +60,7 @@ PenaltyReturnTypeOnItsOwnLine: 200
 # ------------------------------------------------------------
 # Includes
 # ------------------------------------------------------------
-SortIncludes: true
+SortIncludes: false
 IncludeBlocks: Preserve
 
 # ------------------------------------------------------------
