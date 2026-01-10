@@ -18,3 +18,6 @@
 #include "Engine/EntitySystem/GameObject/GameObject.h"
 #include "Engine/EntitySystem/Component/Transform.h"
 #include "Engine/EntitySystem/Component/MeshRenderer.h"
+
+#include "Engine/Resource/Material.h"
+#include "Engine/Resource/Mesh.h"

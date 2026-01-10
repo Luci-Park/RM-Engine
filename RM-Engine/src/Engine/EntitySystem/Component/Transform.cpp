@@ -15,7 +15,7 @@
 namespace rm {
     Transform::Transform(GameObject* owner) 
     : Component(owner),
-        position(0), scale(1), rotation(0) {
+        position(0.5), scale(1), rotation(0) {
     }
 
     void Transform::Init() {

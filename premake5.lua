@@ -115,7 +115,8 @@ project (launcherName)
 
     includedirs
     {
-        engineName .. "/src"
+        engineName .. "/src",
+        IncludeDir["glad"],
     }
 
     links
@@ -146,7 +147,8 @@ project "Sandbox"
 
     includedirs
     {
-        engineName .. "/src"
+        engineName .. "/src",        
+        IncludeDir["glad"],
     }
 
     links

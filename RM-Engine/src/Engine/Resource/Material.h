@@ -12,14 +12,11 @@
 #pragma once
 #include <glad/glad.h>
 
-#include "Engine/Math/Vec4.h"
-
 namespace rm {
-
+    //todo: remove glad from here so we don't have to deal with link errors.
     struct Material {
         GLuint program = 0;
         GLuint texture0 = 0;  // one texture for now
-        math::Vec4 tint{1, 1, 1, 1};
     };
 
 } // rm namespace

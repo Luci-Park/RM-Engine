@@ -13,6 +13,9 @@
 #include "MeshRenderer.h"
 #include "Engine/Resource/Mesh.h"
 #include "Engine/Resource/Material.h"
+#include "Engine/Math/Mat3.h"
+#include "Transform.h"
+#include "../GameObject/GameObject.h"
 
 namespace rm
 {
@@ -42,14 +45,26 @@ namespace rm
     void MeshRenderer::LateUpdate(float dt) {
     }
 
-    void MeshRenderer::Render() {
+void MeshRenderer::Render() {
         if (!mesh || !material)
             return;
-        
+
         glUseProgram(material->program);
 
+        auto transform = GetGameObject()->GetComponent<Transform>();
+        RM_ASSERT(transform != nullptr);
+
+        math::Mat3 model = transform->LocalMatrix();
+        math::Mat3 viewProj(1.0f);
+
+        GLint uModel = glGetUniformLocation(material->program, "u_Model");
+        GLint uViewProj = glGetUniformLocation(material->program, "u_ViewProj");
+
+        glUniformMatrix3fv(uModel, 1, GL_FALSE, &model[0][0]);
+        glUniformMatrix3fv(uViewProj, 1, GL_FALSE, &viewProj[0][0]);
+
         glBindVertexArray(mesh->vao);
-        glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*) 0);
+        glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, nullptr);
         glBindVertexArray(0);
     }
 } // rm namespace

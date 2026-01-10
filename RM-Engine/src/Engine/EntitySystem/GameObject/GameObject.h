@@ -33,6 +33,16 @@ namespace rm
            components.push_back(newComponent);
             return newComponent;
         }
+
+        template<typename T>
+        T* GetComponent() {
+            for (auto c : components) {
+                T* target = dynamic_cast<T*>(c);
+                if (target != nullptr)
+                    return target;
+            }
+            return nullptr;
+        }
 	private:
         std::vector<Component*> components;
 	};

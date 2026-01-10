@@ -12,7 +12,9 @@
 #pragma once
 #include <RMEngine.h>
 
-class SandboxScene : public rm::Scene{
-protected:
-	void OnInit() override;
+class SandboxScene : public rm::Scene {
+public:
+    ~SandboxScene() override;
+   protected:
+    void OnInit() override;
 };

@@ -11,10 +11,9 @@
 
 #pragma once
 #include "Component.h"
+#include "Engine/Resource/Material.h"
+#include "Engine/Resource/Mesh.h"
 namespace rm {
-    class Mesh;
-    class Material;
-
     class MeshRenderer : public Component {
        public:
         MeshRenderer(GameObject* owner);

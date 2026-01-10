@@ -13,7 +13,7 @@
 #include "Component.h"
 #include "Engine/Math/Mat3.h"
 #include "Engine/Math/Vec3.h"
-#include "Engine/Math/Mat4.h"
+
 namespace rm {
     class Transform : public Component {
        public:
